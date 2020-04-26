@@ -16,13 +16,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CallApi {
-    String  baseURL = "http://192.168.0.108:1337";
+
+    // Eyeglass Store
+    //String  baseURL = "http://192.168.0.108:1337";
+    // Home
+    String  baseURL = "http://192.168.0.179:1337";
     String tag_json_object = null;
 
     public void json_get(final VolleyCallback callback, String s){

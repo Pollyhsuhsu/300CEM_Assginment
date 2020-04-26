@@ -17,16 +17,18 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class Login extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class Login<punlic> extends AppCompatActivity {
 
     public static final String TAG = "MYTAG";
     String URLHTTP;
     Button callSignUp, login_btn;
     ImageView image;
-    TextView logoText, sloganText, textView2;
+    TextView logoText, sloganText;
     TextInputLayout username,password;
-    String server_URL = "http://192.168.0.179:1337/customers";
-    String server_URLtest = "http://pastebin.com/raw/2bW31yqa";
+    CallApi callApi = new CallApi();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +63,88 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        login_btn.setOnClickListener(new View.OnClickListener() {
+//        login_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                JSONObject jsonBodyObj = new JSONObject();
+//                try{
+//                    jsonBodyObj.put("email", "admin");
+//                    jsonBodyObj.put("password", "admin");
+//                }catch (JSONException e){
+//                    e.printStackTrace();
+//                }
+//
+//                callApi.json_post(new CallApi.VolleyCallback() {
+//                    @Override
+//                    public void onSuccessResponse(JSONObject response) {
+//                        Log.d(TAG,response.toString());
+//                    }
+//                },"/users/authenticate",jsonBodyObj);
+//            }
+//        });
+    }
+
+    public void userLogin(View view){
+        if(!vaildataPassword() || !vaildataEmail() ){
+            return;
+        }
+        String login_username = username.getEditText().getText().toString();
+        String login_userpassword = password.getEditText().getText().toString();
+
+        JSONObject jsonBodyObj = new JSONObject();
+        try{
+            jsonBodyObj.put("email", login_username);
+            jsonBodyObj.put("password", login_userpassword);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        callApi.json_post(new CallApi.VolleyCallback() {
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Login.this, VolleyTest.class));
-                finish();
+            public void onSuccessResponse(JSONObject response) {
+                Log.d(TAG,response.toString());
             }
-        });
+        },"/users/authenticate",jsonBodyObj);
+    }
+
+    private Boolean vaildataPassword(){
+        String val = password.getEditText().getText().toString();
+        String passwordVal = "^" +
+                //"(?=.*[0-9])" +   //at least 1 digit
+                //"(?=.*[a-z])" +   //at least 1 lower case letter
+                //"(?=.*[A-Z])" +   //at least 1 upper case letter
+                "(?=.*[a-zA-Z])" +  //any letter
+                //"(?=.*[@#$%^&+=])"+ //at least 1 special character
+                "(?=\\S+$)" +       //no white spaces
+                ".{4,}"+           // at least characters
+                "$";
+        if(val.isEmpty()){
+            password.setError("Field cannot be empty");
+            return false;
+        }
+//        else if(val.matches(passwordVal)){
+//            password.setError("Password is to weak");
+//            return false;
+//        }
+        else{
+            password.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean vaildataEmail(){
+        String val = username.getEditText().getText().toString();
+        String emailPatten = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if(val.isEmpty()){
+            username.setError("Field cannot be empty");
+            return false;
+        }else if(val.matches(emailPatten)){
+            username.setError("Invalid email address");
+            return false;
+        }else{
+            username.setError(null);
+            return true;
+        }
     }
 }
