@@ -7,22 +7,26 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class Login extends AppCompatActivity {
+
+    public static final String TAG = "MYTAG";
+    String URLHTTP;
     Button callSignUp, login_btn;
     ImageView image;
-    TextView logoText, sloganText;
+    TextView logoText, sloganText, textView2;
     TextInputLayout username,password;
-
+    String server_URL = "http://192.168.0.179:1337/customers";
+    String server_URLtest = "http://pastebin.com/raw/2bW31yqa";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,6 @@ public class Login extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login_btn = findViewById(R.id.login_btn);
-
 
         callSignUp.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -58,5 +61,12 @@ public class Login extends AppCompatActivity {
             }
         });
 
+        login_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Login.this, VolleyTest.class));
+                finish();
+            }
+        });
     }
 }
