@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "340859470580",
+    "firebase_url": "https://dogup-3d2c2.firebaseio.com",
+    "project_id": "dogup-3d2c2",
+    "storage_bucket": "dogup-3d2c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340859470580:android:29a4758be40fdab6cf14a1",
+        "android_client_info": {
+          "package_name": "com.example.a300cem_android_assignment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340859470580-9fhho1iehfu06nj2vksh3iovoa6ackk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.a300cem_android_assignment",
+            "certificate_hash": "557d307e3ddbf2055ec2f6798a788bb759315f68"
+          }
+        },
+        {
+          "client_id": "340859470580-99okrtqka6vmf3aoceosmc9bpotceamu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApuGMIkYsCKp7S5aUCfEEMFnAilnRLins"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340859470580-99okrtqka6vmf3aoceosmc9bpotceamu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -108,7 +108,7 @@ public class Login<punlic> extends AppCompatActivity {
         },"/users/authenticate",jsonBodyObj);
 
 
-        Intent intent = new Intent(this, Dashboard.class);
+        Intent intent = new Intent(this, Chat.class);
         startActivity(intent);
     }
 

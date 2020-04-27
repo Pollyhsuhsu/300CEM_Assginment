@@ -4,4 +4,5 @@
     <string name="Dog_up"> Dog UP</string>
     <string name="search_text"> Search...</string>
     <string name="dogs"> Dogs</string>
+    <string name="input_placeholder">Write a message</string>
 </resources>
