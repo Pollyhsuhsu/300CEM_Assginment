@@ -106,6 +106,10 @@ public class Login<punlic> extends AppCompatActivity {
                 Log.d(TAG,response.toString());
             }
         },"/users/authenticate",jsonBodyObj);
+
+
+        Intent intent = new Intent(this, Dashboard.class);
+        startActivity(intent);
     }
 
     private Boolean vaildataPassword(){

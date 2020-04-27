@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.actions"
-            android:resource="@xml/card1" />
+            android:resource="@xml/network_security_config" />
 
         <activity android:name=".Dashboard" />
         <activity android:name=".VolleyTest" />
