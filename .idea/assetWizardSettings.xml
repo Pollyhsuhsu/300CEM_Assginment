@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/places/ic_golf_course_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_attach_file_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -69,9 +69,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
                                       <entry key="imageAsset" value="$USER_HOME$/Desktop/icons8-corgi-100.png" />
-                                      <entry key="outputName" value="ic_meun_menulogo_icon" />
+                                      <entry key="outputName" value="ic_attatch_black" />
                                       <entry key="theme" value="CUSTOM" />
                                       <entry key="themeColor" value="000000" />
                                     </map>
@@ -112,7 +111,6 @@
                                   <option name="values">
                                     <map>
                                       <entry key="foregroundImage" value="$USER_HOME$/Desktop/icons8-corgi-100.png" />
-                                      <entry key="foregroundLayerName" value="ic_corgi_bg" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -134,6 +132,17 @@
                                           </PersistentState>
                                         </value>
                                       </entry>
+                                      <entry key="clipartAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_attach_file_black_24dp.xml" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="image">
                                         <value>
                                           <PersistentState>
@@ -149,8 +158,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="assetType" value="IMAGE" />
-                                      <entry key="iconShape" value="HRECT" />
+                                      <entry key="cropped" value="true" />
+                                      <entry key="iconShape" value="NONE" />
                                       <entry key="imageAsset" value="$USER_HOME$/Desktop/icons8-corgi-100.png" />
                                     </map>
                                   </option>
@@ -178,6 +187,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>

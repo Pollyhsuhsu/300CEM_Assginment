@@ -1,0 +1,108 @@
+package com.example.a300cem_android_assignment.Adapter;
+
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.a300cem_android_assignment.CallApi;
+import com.example.a300cem_android_assignment.R;
+import com.example.a300cem_android_assignment.models.ModelGroupChat;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
+public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.HolderGroupChat>{
+
+    private static final int MSG_TYPE_LEFT = 0;
+    private static final int MSG_TYPE_Right = 1;
+
+    private Context context;
+    private ArrayList<ModelGroupChat> modelGroupChatsList;
+    private int currentUser_id;
+    private int currentRoom_id;
+
+    public GroupChatAdapter(Context context, ArrayList<ModelGroupChat> modelGroupChatsList,int currentUserID, int currentRoomID) {
+        this.context = context;
+        this.modelGroupChatsList = modelGroupChatsList;
+        currentUser_id = currentUserID;
+    }
+
+    @NonNull
+    @Override
+    public HolderGroupChat onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(viewType == MSG_TYPE_Right){
+            View view = LayoutInflater.from(context).inflate(R.layout.row_groupchat_right, parent,false);
+            return new HolderGroupChat(view);
+        }else{
+            View view = LayoutInflater.from(context).inflate(R.layout.row_groupchat_left, parent,false);
+            return new HolderGroupChat(view);
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull HolderGroupChat holder, int position) {
+        ModelGroupChat model = modelGroupChatsList.get(position);
+        int senderUid = model.getSender_id();
+        String timestamp = model.getTimestamp();
+        String senderName = model.getSender_name();
+        String message = model.getMessage();
+
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(Long.parseLong(timestamp));
+        String dataTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
+
+        Log.d("error400",senderName);
+        holder.messageTv.setText(message);
+
+        if(senderUid != currentUser_id){
+            holder.nameTv.setText(senderName);
+        }
+        holder.timeTv.setText(dataTime);
+
+        //setUserName(model, holder);
+    }
+
+    private void setUserName(ModelGroupChat model, HolderGroupChat holder) {
+//        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Groups");
+//        ref.orderByChild(Integer.toString(currentRoom_id))
+    }
+
+    @Override
+    public int getItemCount() {
+        return modelGroupChatsList.size();
+    }
+    @Override
+    public int getItemViewType(int position) {
+        if(modelGroupChatsList.get(position).getSender_id() == currentUser_id){
+            return MSG_TYPE_Right;
+        }else{
+            return MSG_TYPE_LEFT;
+        }
+    }
+
+
+    class HolderGroupChat extends RecyclerView.ViewHolder{
+        private TextView nameTv,messageTv,timeTv;
+
+        public HolderGroupChat(@NonNull View itemView) {
+            super(itemView);
+
+            nameTv = (TextView) itemView.findViewById(R.id.nameTv);
+            messageTv =(TextView) itemView.findViewById(R.id.messageTv);
+            timeTv = (TextView) itemView.findViewById(R.id.timeTv);
+        }
+
+    }
+}

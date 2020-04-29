@@ -14,21 +14,30 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.material.textfield.TextInputEditText;
+
+import com.example.a300cem_android_assignment.Adapter.UserAdapter;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Login<punlic> extends AppCompatActivity {
+import java.lang.reflect.Type;
+import java.util.List;
+
+public class Login extends AppCompatActivity {
 
     public static final String TAG = "MYTAG";
-    String URLHTTP;
+    UserAdapter currentUser;
     Button callSignUp, login_btn;
     ImageView image;
     TextView logoText, sloganText;
     TextInputLayout username,password;
     CallApi callApi = new CallApi();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,13 +111,27 @@ public class Login<punlic> extends AppCompatActivity {
 
         callApi.json_post(new CallApi.VolleyCallback() {
             @Override
-            public void onSuccessResponse(JSONObject response) {
-                Log.d(TAG,response.toString());
+            public void onSuccessResponse(JSONObject response) throws JSONException {
+                if(response.getBoolean("status")){
+                    //suss(response.getJSONObject("data"));
+                    JSONObject data = response.getJSONObject("data");
+                    currentUser = new UserAdapter();
+                    currentUser.setU_id(data.getInt("id"));
+                    currentUser.setUsername(data.getString("username"));
+                    currentUser.setEmail(data.getString("email"));
+                    currentUser.setCreated_at(data.getString("created_at"));
+                    currentUser.setUpdated_at(data.getString("updated_at"));
+                    suss(currentUser);
+                }
             }
         },"/users/authenticate",jsonBodyObj);
+    }
 
-
-        Intent intent = new Intent(this, Chat.class);
+    //private void suss(JSONObject resultData) throws JSONException {
+      private void suss(UserAdapter currentUser) throws JSONException {
+        //Log.d(TAG,currentUser.toString());
+        Intent intent = new Intent(this, GroupChatActivity.class);
+        intent.putExtra("currentUser", currentUser);
         startActivity(intent);
     }
 

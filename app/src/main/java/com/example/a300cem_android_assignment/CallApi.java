@@ -13,6 +13,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.a300cem_android_assignment.Volley.AppController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ import java.util.Map;
 public class CallApi {
 
     // Eyeglass Store
-    //String  baseURL = "http://192.168.0.108:1337";
+    //String  baseURL = "http://192.168.0.109:1337";
     // Home
     String  baseURL = "http://192.168.0.179:1337";
     String tag_json_object = null;
@@ -38,7 +39,11 @@ public class CallApi {
                     @Override
                     public void onResponse(JSONObject response) {
                         //Log.d(TAG, response.toString());
-                        callback.onSuccessResponse(response);
+                        try {
+                            callback.onSuccessResponse(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         // get_response_text.setText("Data :" + response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -62,7 +67,11 @@ public class CallApi {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, response.toString());
-                        callback.onSuccessResponse(response);
+                        try {
+                            callback.onSuccessResponse(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -110,6 +119,6 @@ public class CallApi {
 
 
     public interface VolleyCallback {
-        void onSuccessResponse(JSONObject response);
+        void onSuccessResponse(JSONObject response) throws JSONException;
     }
 }
