@@ -1,13 +1,13 @@
-package com.example.a300cem_android_assignment.Adapter;
+package com.example.a300cem_android_assignment.models;
 
 
 import java.io.Serializable;
 
-public class UserAdapter implements Serializable {
+public class ModelUser implements Serializable {
     private int u_id;
     private String username,password,email,created_at,updated_at;
 
-    public UserAdapter(int u_id, String username, String password, String email, String created_at, String updated_at) {
+    public ModelUser(int u_id, String username, String password, String email, String created_at, String updated_at) {
         this.u_id = u_id;
         this.username = username;
         this.password = password;
@@ -15,7 +15,7 @@ public class UserAdapter implements Serializable {
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
-    public UserAdapter() {
+    public ModelUser() {
 
     }
     public int getU_id() {

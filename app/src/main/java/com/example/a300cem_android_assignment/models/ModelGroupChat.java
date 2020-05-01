@@ -1,17 +1,18 @@
 package com.example.a300cem_android_assignment.models;
 
 public class ModelGroupChat {
-    String message, sender_name, timestamp, type;
+    String message, sender_name, timestamp, type, color;
     int sender_id;
 
     public ModelGroupChat() {
     }
 
-    public ModelGroupChat(String message, String sender_name, String timestamp, String type, int sender_id) {
+    public ModelGroupChat(String message, String sender_name, String timestamp, String type, String color, int sender_id) {
         this.message = message;
         this.sender_name = sender_name;
         this.timestamp = timestamp;
         this.type = type;
+        this.color = color;
         this.sender_id = sender_id;
     }
 
@@ -53,5 +54,13 @@ public class ModelGroupChat {
 
     public void setSender_id(int sender_id) {
         this.sender_id = sender_id;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

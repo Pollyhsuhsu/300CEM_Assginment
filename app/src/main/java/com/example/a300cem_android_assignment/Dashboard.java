@@ -7,6 +7,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.example.a300cem_android_assignment.HomeAdapter.FeaturedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.FeaturedHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedHelperClass;
+import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -29,6 +31,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
     RecyclerView featuredRecycler, mostViewedRecycler, categoriesRecycler;
     RecyclerView.Adapter adapter;
+    ModelUser currentUser;
     private GradientDrawable gradient1, gradient2, gradient3, gradient4;
     static final float END_SCALE = 0.7f;
 
@@ -62,8 +65,13 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         mostViewedRecycler();
         categoriesRecycler();
         naviagtionDrawer();
+        getCurrentUserInfo();
     }
 
+    private void getCurrentUserInfo() {
+        Intent intent = getIntent();
+        currentUser = (ModelUser) intent.getSerializableExtra("currentUser");
+    }
     private void naviagtionDrawer() {
         //Naviagtion Drawer
         navigationView.bringToFront();
@@ -83,28 +91,25 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     }
 
     private void animateNavigationDrawer() {
-
         //Add any color or remove it to use the default one!
         //To make it transparent use Color.Transparent in side setScrimColor();
         //drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
+            // Scale the View based on current slide offset
+            final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+            final float offsetScale = 1 - diffScaledOffset;
+            contentView.setScaleX(offsetScale);
+            contentView.setScaleY(offsetScale);
 
-                // Scale the View based on current slide offset
-                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
-                final float offsetScale = 1 - diffScaledOffset;
-                contentView.setScaleX(offsetScale);
-                contentView.setScaleY(offsetScale);
-
-                // Translate the View, accounting for the scaled width
-                final float xOffset = drawerView.getWidth() * slideOffset;
-                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
-                final float xTranslation = xOffset - xOffsetDiff;
-                contentView.setTranslationX(xTranslation);
+            // Translate the View, accounting for the scaled width
+            final float xOffset = drawerView.getWidth() * slideOffset;
+            final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
+            final float xTranslation = xOffset - xOffsetDiff;
+            contentView.setTranslationX(xTranslation);
             }
         });
-
     }
 
     private void featuredRecycler() {
@@ -169,6 +174,16 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.nav_home:
+                break;
+            case R.id.nav_group_chat:
+                Intent intent = new Intent(this,GroupChatroomList.class);
+                intent.putExtra("currentUser", currentUser);
+                startActivity(intent);
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }

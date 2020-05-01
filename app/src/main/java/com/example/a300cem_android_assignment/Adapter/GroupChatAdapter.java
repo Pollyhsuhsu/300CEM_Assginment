@@ -11,13 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a300cem_android_assignment.CallApi;
 import com.example.a300cem_android_assignment.R;
 import com.example.a300cem_android_assignment.models.ModelGroupChat;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,13 +24,13 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
     private static final int MSG_TYPE_Right = 1;
 
     private Context context;
-    private ArrayList<ModelGroupChat> modelGroupChatsList;
+    private ArrayList<ModelGroupChat> modelGroupChatsListList;
     private int currentUser_id;
     private int currentRoom_id;
 
-    public GroupChatAdapter(Context context, ArrayList<ModelGroupChat> modelGroupChatsList,int currentUserID, int currentRoomID) {
+    public GroupChatAdapter(Context context, ArrayList<ModelGroupChat> modelGroupChatsListList, int currentUserID, int currentRoomID) {
         this.context = context;
-        this.modelGroupChatsList = modelGroupChatsList;
+        this.modelGroupChatsListList = modelGroupChatsListList;
         currentUser_id = currentUserID;
     }
 
@@ -53,7 +48,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
 
     @Override
     public void onBindViewHolder(@NonNull HolderGroupChat holder, int position) {
-        ModelGroupChat model = modelGroupChatsList.get(position);
+        ModelGroupChat model = modelGroupChatsListList.get(position);
         int senderUid = model.getSender_id();
         String timestamp = model.getTimestamp();
         String senderName = model.getSender_name();
@@ -81,11 +76,11 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
 
     @Override
     public int getItemCount() {
-        return modelGroupChatsList.size();
+        return modelGroupChatsListList.size();
     }
     @Override
     public int getItemViewType(int position) {
-        if(modelGroupChatsList.get(position).getSender_id() == currentUser_id){
+        if(modelGroupChatsListList.get(position).getSender_id() == currentUser_id){
             return MSG_TYPE_Right;
         }else{
             return MSG_TYPE_LEFT;
@@ -95,6 +90,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
 
     class HolderGroupChat extends RecyclerView.ViewHolder{
         private TextView nameTv,messageTv,timeTv;
+        private View avatar;
 
         public HolderGroupChat(@NonNull View itemView) {
             super(itemView);
@@ -102,6 +98,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
             nameTv = (TextView) itemView.findViewById(R.id.nameTv);
             messageTv =(TextView) itemView.findViewById(R.id.messageTv);
             timeTv = (TextView) itemView.findViewById(R.id.timeTv);
+            avatar = (View) itemView.findViewById(R.id.avatar);
         }
 
     }

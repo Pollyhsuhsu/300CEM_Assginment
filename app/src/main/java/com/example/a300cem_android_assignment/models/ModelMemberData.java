@@ -1,17 +1,17 @@
-package com.example.a300cem_android_assignment.Adapter;
+package com.example.a300cem_android_assignment.models;
 
-public class MemberData {
+public class ModelMemberData {
     private String name;
     //private String color;
     private int u_id;
 
-    public MemberData(String name, int u_id) {
+    public ModelMemberData(String name, int u_id) {
         this.name = name;
        // this.color = color;
         this.u_id = u_id;
     }
 
-    public MemberData() {
+    public ModelMemberData() {
     }
 
 

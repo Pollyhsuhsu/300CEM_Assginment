@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="1dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="25dp"
+    app:contentPadding="3dp"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.blogspot.atifsoftwares.circularimageview.CircularImageView
+            android:id="@+id/groupIconIv"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_group_primary"/>
+            <TextView
+                android:id="@+id/groupTitleTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="Group Title"
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/groupIconIv" />
+
+            <TextView
+                android:id="@+id/nameTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/groupTitleTv"
+                android:layout_toRightOf="@+id/groupIconIv"
+                android:layout_marginLeft="4dp"
+                android:text="Sender Name"
+                android:textColor="@color/black" />
+
+             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/messageTv"
+                android:layout_toRightOf="@+id/nameTv"
+                android:layout_below="@id/groupTitleTv"
+                android:text="The message"
+                android:layout_marginLeft="4dp"
+                android:textColor="#666262"
+                android:singleLine="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timeTv"
+                android:layout_below="@id/nameTv"
+                android:text="The message"
+                android:textColor="#666262"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:singleLine="true"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

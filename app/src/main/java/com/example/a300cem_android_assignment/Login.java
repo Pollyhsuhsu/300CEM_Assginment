@@ -7,7 +7,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,23 +14,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.a300cem_android_assignment.Adapter.UserAdapter;
+import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
-import java.util.List;
-
 public class Login extends AppCompatActivity {
 
     public static final String TAG = "MYTAG";
-    UserAdapter currentUser;
+
+    ModelUser currentUser;
     Button callSignUp, login_btn;
     ImageView image;
     TextView logoText, sloganText;
@@ -115,7 +108,7 @@ public class Login extends AppCompatActivity {
                 if(response.getBoolean("status")){
                     //suss(response.getJSONObject("data"));
                     JSONObject data = response.getJSONObject("data");
-                    currentUser = new UserAdapter();
+                    currentUser = new ModelUser();
                     currentUser.setU_id(data.getInt("id"));
                     currentUser.setUsername(data.getString("username"));
                     currentUser.setEmail(data.getString("email"));
@@ -128,9 +121,9 @@ public class Login extends AppCompatActivity {
     }
 
     //private void suss(JSONObject resultData) throws JSONException {
-      private void suss(UserAdapter currentUser) throws JSONException {
+      private void suss(ModelUser currentUser) throws JSONException {
         //Log.d(TAG,currentUser.toString());
-        Intent intent = new Intent(this, GroupChatActivity.class);
+        Intent intent = new Intent(this, Dashboard.class);
         intent.putExtra("currentUser", currentUser);
         startActivity(intent);
     }

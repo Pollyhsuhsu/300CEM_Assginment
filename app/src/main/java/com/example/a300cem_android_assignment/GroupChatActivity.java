@@ -5,14 +5,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,9 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.a300cem_android_assignment.Adapter.ChatroomAdapter;
+import com.example.a300cem_android_assignment.models.ModelChatroom;
 import com.example.a300cem_android_assignment.Adapter.GroupChatAdapter;
-import com.example.a300cem_android_assignment.Adapter.UserAdapter;
+import com.example.a300cem_android_assignment.models.ModelUser;
 import com.example.a300cem_android_assignment.models.ModelGroupChat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,10 +34,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GroupChatActivity extends AppCompatActivity {
-    ChatroomAdapter currentChatroom;
-    UserAdapter currentUser;
+    private ModelChatroom currentChatroom;
+    private ModelUser currentUser;
 
     FirebaseDatabase FireBaseDatabase;
     //DatabaseReference GroupNameRef, GroupMessageKeyRef;
@@ -75,12 +73,10 @@ public class GroupChatActivity extends AppCompatActivity {
         sendBtn =(ImageButton)  findViewById(R.id.sendBtn);
         chatRv =(RecyclerView)  findViewById(R.id.chatRv);
 
-//        Intent intent = getIntent();
-//        groupID = intent.getStringExtra(groupID);
-        GetcurrentChatRoomInfo();
-        GetcurrentUserInfo();
+        getcurrentChatRoomInfo();
+        getCurrentUserInfo();
  //       loodGroupInfo();
-        //loadGroupMessage();
+        loadGroupMessage(currentChatroom);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +93,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
     }
 
-    private void loadGroupMessage(final ChatroomAdapter cc) {
+    private void loadGroupMessage(final ModelChatroom cc) {
         System.out.println(cc.toString());
         //init list
         groupChatList = new ArrayList<>();
@@ -125,9 +121,9 @@ public class GroupChatActivity extends AppCompatActivity {
                 });
     }
 
-    private void GetcurrentUserInfo() {
+    private void getCurrentUserInfo() {
         Intent intent = getIntent();
-        currentUser = (UserAdapter) intent.getSerializableExtra("currentUser");
+        currentUser = (ModelUser) intent.getSerializableExtra("currentUser");
     }
 
     private void sendMessage(final String message) {
@@ -161,14 +157,17 @@ public class GroupChatActivity extends AppCompatActivity {
                 });
     }
 
-    private void GetcurrentChatRoomInfo() {
-        CallApi callApi = new CallApi();
-        callApi.json_get(new CallApi.VolleyCallback() {
-            @Override
-            public void onSuccessResponse(JSONObject response) throws JSONException {
-                SetcurrentChatRoomInfo(response.getJSONObject("data"));
-            }
-        },"/chatrooms/querybyId/1");
+    private void getcurrentChatRoomInfo() {
+//        CallApi callApi = new CallApi();
+//        callApi.json_get(new CallApi.VolleyCallback() {
+//            @Override
+//            public void onSuccessResponse(JSONObject response) throws JSONException {
+//                SetcurrentChatRoomInfo(response.getJSONObject("data"));
+//            }
+//        },"/chatrooms/querybyId/1");
+
+        Intent intent = getIntent();
+        currentChatroom = (ModelChatroom) intent.getSerializableExtra("currentChatroom");
     }
 
     private void SetcurrentChatRoomInfo(JSONObject result) throws JSONException {
@@ -177,7 +176,7 @@ public class GroupChatActivity extends AppCompatActivity {
         currentGroupName = result.getString("chatroom_name");
         currentGroupDesc = result.getString("chatroom_desc");
         currentCreatedAt = result.getString("created_at");
-        currentChatroom = new ChatroomAdapter(currentGroupID, currentGroupName, currentGroupDesc, currentCreatedAt);
+        //currentChatroom = new ModelChatroom(currentGroupID, currentGroupName, currentGroupDesc, currentCreatedAt);
         //GroupNameRef = database.getReference().child("Groups").child(Integer.toString(currentChatroom.getChatroom_id()));
 
 
@@ -187,5 +186,14 @@ public class GroupChatActivity extends AppCompatActivity {
         groupTitleTv.setText(currentGroupName);
 
         loadGroupMessage(currentChatroom);
+    }
+
+    private String getRandomColor() {
+        Random r = new Random();
+        StringBuffer sb = new StringBuffer("#");
+        while(sb.length() < 7){
+            sb.append(Integer.toHexString(r.nextInt()));
+        }
+        return sb.toString().substring(0, 7);
     }
 }
