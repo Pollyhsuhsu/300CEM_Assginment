@@ -47,19 +47,16 @@ import java.util.ArrayList;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 //
-public class GroupChatroomList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class GroupChatroomList extends AppCompatActivity {
     private ArrayList<ModelChatroom> groupChatLists = new ArrayList<>();;
     private static final int REQUEST_CODE_LOCATION_PERMISSON = 1;
-    static final float END_SCALE = 0.7f;
     private ListView groupsLv;
     private RelativeLayout createGroupChatroom;
     private int currentUserID;
     private int pick = 0;
-    //Drawer Menu
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    ImageView menuIcon, setting_distance;
-    LinearLayout contentView;
+
+    ImageView setting_distance;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,196 +66,170 @@ public class GroupChatroomList extends AppCompatActivity implements NavigationVi
 
         //Hook
         groupsLv =(ListView) findViewById(R.id.groupsLv);
-        createGroupChatroom = (RelativeLayout) findViewById(R.id.createGroupChatroom);
-
-        //Menu Hooks
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view);
-        menuIcon = findViewById(R.id.menu_icon);
-        contentView = findViewById(R.id.content);
+       // createGroupChatroom = (RelativeLayout) findViewById(R.id.createGroupChatroom);
         setting_distance = findViewById(R.id.setting_distance)
 
         ;
-        naviagtionDrawer();
         getCurrentUserInfo();
-        createGroupChatroom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GroupChatroomList.this, CreateChatRoom.class);
-                startActivity(intent);
-            }
-        });
 
-        setting_distance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                show();
-            }
-        });
+        //loadGroupChatsList(latitude,longitude, pick);
+        loadGroupChatsList();
+//        createGroupChatroom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(GroupChatroomList.this, CreateChatRoom.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        groupsLv.setOnTouchListener(new ListView.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+//        setting_distance.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                show();
+//            }
+//        });
+  }
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
-                }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        if(ContextCompat.checkSelfPermission(
+//                getApplication(), ACCESS_FINE_LOCATION
+//        )!= PackageManager.PERMISSION_GRANTED){
+//            ActivityCompat.requestPermissions(
+//                    GroupChatroomList.this,
+//                    new String[]{ACCESS_FINE_LOCATION},
+//                    REQUEST_CODE_LOCATION_PERMISSON
+//            );
+//        }else{
+//            getCurrentLocation(pick);
+//        }
+//    }
 
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if(requestCode == REQUEST_CODE_LOCATION_PERMISSON && grantResults.length>0){
+//            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                getCurrentLocation(pick);
+//            }else{
+//                Toast.makeText(this,"Permission denied:", Toast.LENGTH_SHORT).show();
+//                Intent intent = null;
+//                GroupChatroomList.this.setResult(RESULT_OK, intent);
+//                GroupChatroomList.this.finish();
+//            }
+//        }
+//    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(ContextCompat.checkSelfPermission(
-                getApplication(), ACCESS_FINE_LOCATION
-        )!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(
-                    GroupChatroomList.this,
-                    new String[]{ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_LOCATION_PERMISSON
-            );
-        }else{
-            getCurrentLocation(pick);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == REQUEST_CODE_LOCATION_PERMISSON && grantResults.length>0){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getCurrentLocation(pick);
-            }else{
-                Toast.makeText(this,"Permission denied:", Toast.LENGTH_SHORT).show();
-                Intent intent = null;
-                GroupChatroomList.this.setResult(RESULT_OK, intent);
-                GroupChatroomList.this.finish();
-            }
-        }
-    }
-
-    private void getCurrentLocation(final int pick) {
-        final LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(10000);
-        locationRequest.setFastestInterval(3000);
-        locationRequest.setPriority(locationRequest.PRIORITY_HIGH_ACCURACY);
-
-        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
-                .requestLocationUpdates(locationRequest, new LocationCallback(){
-
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
-                                .removeLocationUpdates(this);
-                        if(locationRequest != null && locationResult.getLocations().size() > 0){
-                            int latestLocationIndex = locationResult.getLocations().size() - 1;
-                            double latitude =
-                                    locationResult.getLocations().get(latestLocationIndex).getLatitude();
-                            double longitude =
-                                    locationResult.getLocations().get(latestLocationIndex).getLongitude();
-
-                            loadGroupChatsList(latitude,longitude, pick);
-                            Log.d("MAG", "latitude：" + latitude + "longitude：" + longitude);
-                        }
-                    }
-                }, Looper.getMainLooper());
-    }
+//    private void getCurrentLocation(final int pick) {
+//        final LocationRequest locationRequest = new LocationRequest();
+//        locationRequest.setInterval(10000);
+//        locationRequest.setFastestInterval(3000);
+//        locationRequest.setPriority(locationRequest.PRIORITY_HIGH_ACCURACY);
+//
+//        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
+//                .requestLocationUpdates(locationRequest, new LocationCallback(){
+//
+//                    @Override
+//                    public void onLocationResult(LocationResult locationResult) {
+//                        super.onLocationResult(locationResult);
+//                        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
+//                                .removeLocationUpdates(this);
+//                        if(locationRequest != null && locationResult.getLocations().size() > 0){
+//                            int latestLocationIndex = locationResult.getLocations().size() - 1;
+//                            double latitude =
+//                                    locationResult.getLocations().get(latestLocationIndex).getLatitude();
+//                            double longitude =
+//                                    locationResult.getLocations().get(latestLocationIndex).getLongitude();
+//
+//                            loadGroupChatsList(latitude,longitude, pick);
+//                            Log.d("MAG", "latitude：" + latitude + "longitude：" + longitude);
+//                        }
+//                    }
+//                }, Looper.getMainLooper());
+//    }
 
     private void getCurrentUserInfo() {
         SessionManagement sessionManagement = new SessionManagement(GroupChatroomList.this);
         currentUserID = sessionManagement.getSession();
         Log.d("userID", String.valueOf(currentUserID));
     }
-
-    private void loadGroupChatsList(double latitude,double longitude, int p){
-        if(pick == 0){
-            pick = 5000;
-        }else{
-            pick = p;
-        }
-        if(!groupChatLists.isEmpty()){
-            groupChatLists.clear();
-        };
-//        CallApi callApi = new CallApi();
-////        callApi.json_get(new CallApi.VolleyCallback() {
-////            @Override
-////            public void onSuccessResponse(JSONObject result) throws JSONException {
-////                groupChatLists = new ArrayList<>();
-////                JSONArray data = result.getJSONArray("data");
-////                for (int i = 0; i < data.length(); i++) {
-////                    JSONObject obj = data.getJSONObject(i);
-////                    int id = obj.getInt("id");
-////                    String chatroom_name = obj.getString("chatroom_name");
-////                    String chatroom_desc = obj.getString("chatroom_desc");
-////                    String chatroom_icon = obj.getString("chatroom_image");
-////                    int created_by =  obj.getInt("created_by");
-////                    String created_at = obj.getString("created_at");
-////                    double longitude  = obj.getDouble("longitude");
-////                    double latitude= obj.getDouble("latitude");
-////
-////                    ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude,latitude);
-////                    System.out.println(modelChatroom.toString());
-////                    groupChatLists.add(modelChatroom);
-////                    setGroupChatLists(groupChatLists);
-////                }
-////            }
-////        },"/chatrooms/All");
-
-
+//double latitude,double longitude, int p
+    private void loadGroupChatsList(){
+//        if(pick == 0){
+//            pick = 5000;
+//        }else{
+//            pick = p;
+//        }
+//        if(!groupChatLists.isEmpty()){
+//            groupChatLists.clear();
+//        };
         CallApi callApi = new CallApi();
         callApi.json_get(new CallApi.VolleyCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) throws JSONException {
-                if(result.getBoolean("status")) {
-                    JSONArray data = result.getJSONArray("data");
-                    if(data != null || data.length()>0) {
-                        Log.d("result", data.toString());
-                        for (int i = 0; i < data.length(); i++) {
-                            JSONObject obj = data.getJSONObject(i);
-                            int id = obj.getInt("id");
-                            String chatroom_name = obj.getString("chatroom_name");
-                            String chatroom_desc = obj.getString("chatroom_desc");
-                            String chatroom_icon = obj.getString("chatroom_image");
-                            int created_by = obj.getInt("created_by");
-                            String created_at = obj.getString("created_at");
-                            double longitude = obj.getDouble("longitude");
-                            double latitude = obj.getDouble("latitude");
-                            double distance = obj.getDouble("distance");
+                groupChatLists = new ArrayList<>();
+                JSONArray data = result.getJSONArray("data");
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject obj = data.getJSONObject(i);
+                    int id = obj.getInt("id");
+                    String chatroom_name = obj.getString("chatroom_name");
+                    String chatroom_desc = obj.getString("chatroom_desc");
+                    String chatroom_icon = obj.getString("chatroom_image");
+                    int created_by =  obj.getInt("created_by");
+                    String created_at = obj.getString("created_at");
+                    double longitude  = obj.getDouble("longitude");
+                    double latitude= obj.getDouble("latitude");
 
-                            ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude, latitude, distance);
-                            groupChatLists.add(modelChatroom);
-                            setGroupChatLists(groupChatLists);
-                        }
-                    }
+                    ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude,latitude,0);
+                    System.out.println(modelChatroom.toString());
+                    groupChatLists.add(modelChatroom);
+                    setGroupChatLists(groupChatLists);
                 }
             }
-        },"/nearby/nychatroom/" + latitude + "&" + longitude + "&" + pick);
+        },"/chatrooms/All");
+
+
+//        CallApi callApi = new CallApi();
+//        callApi.json_get(new CallApi.VolleyCallback() {
+//            @Override
+//            public void onSuccessResponse(JSONObject result) throws JSONException {
+//                if(result.getBoolean("status")) {
+//                    JSONArray data = result.getJSONArray("data");
+//                    if(data != null || data.length()>0) {
+//                        Log.d("result", data.toString());
+//                        for (int i = 0; i < data.length(); i++) {
+//                            JSONObject obj = data.getJSONObject(i);
+//                            int id = obj.getInt("id");
+//                            String chatroom_name = obj.getString("chatroom_name");
+//                            String chatroom_desc = obj.getString("chatroom_desc");
+//                            String chatroom_icon = obj.getString("chatroom_image");
+//                            int created_by = obj.getInt("created_by");
+//                            String created_at = obj.getString("created_at");
+//                            double longitude = obj.getDouble("longitude");
+//                            double latitude = obj.getDouble("latitude");
+//                            double distance = obj.getDouble("distance");
+//
+//                            ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude, latitude, distance);
+//                            groupChatLists.add(modelChatroom);
+//                            setGroupChatLists(groupChatLists);
+//                        }
+//                    }
+//                }
+//            }
+//        },"/nearby/nychatroom/" + latitude + "&" + longitude + "&" + pick);
     }
 
     private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists){
         GroupListAdapter groupListAdapter = new GroupListAdapter(GroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
-       if(groupsLv.getAdapter() == null) {
+       //if(groupsLv.getAdapter() == null) {
             groupsLv.setAdapter(groupListAdapter);
-        }else{
-            groupsLv.setAdapter(groupListAdapter);
-            groupListAdapter.notifyDataSetChanged();
-            groupsLv.invalidateViews();
-            groupsLv.refreshDrawableState();
-        }
+//        }else{
+//            groupsLv.setAdapter(groupListAdapter);
+//            groupListAdapter.notifyDataSetChanged();
+//            groupsLv.invalidateViews();
+//            groupsLv.refreshDrawableState();
+//        }
 
 
         groupsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -282,139 +253,78 @@ public class GroupChatroomList extends AppCompatActivity implements NavigationVi
         });
     }
 
-    private void naviagtionDrawer() {
-        //Naviagtion Drawer
-        navigationView.bringToFront();
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_group_chat);
-
-        menuIcon.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                if(drawerLayout.isDrawerVisible(GravityCompat.START))
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                else drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        animateNavigationDrawer();
-    }
-
-    private void animateNavigationDrawer() {
-        //Add any color or remove it to use the default one!
-        //To make it transparent use Color.Transparent in side setScrimColor();
-        //drawerLayout.setScrimColor(Color.TRANSPARENT);
-        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // Scale the View based on current slide offset
-                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
-                final float offsetScale = 1 - diffScaledOffset;
-                contentView.setScaleX(offsetScale);
-                contentView.setScaleY(offsetScale);
-
-                // Translate the View, accounting for the scaled width
-                final float xOffset = drawerView.getWidth() * slideOffset;
-                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
-                final float xTranslation = xOffset - xOffsetDiff;
-                contentView.setTranslationX(xTranslation);
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else
-            super.onBackPressed();
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Intent intent;
-        switch(menuItem.getItemId()){
-            case R.id.nav_home:
-                intent = new Intent(this,Dashboard.class);
-                startActivity(intent);
-                break;
-            case R.id.nav_group_chat:
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    public void show(){
-        final Dialog npDialog = new Dialog(GroupChatroomList.this);
-        npDialog.setTitle("NumberPicker Example");
-        npDialog.setContentView(R.layout.seletor_dialog);
-        Button setBtn = (Button)npDialog.findViewById(R.id.setBtn);
-        Button cnlBtn = (Button)npDialog.findViewById(R.id.CancelButton_NumberPicker);
-
-        final NumberPicker numberPicker = (NumberPicker)npDialog.findViewById(R.id.numberPicker);
-
-        String mValues[] = { "100km ", "200km ","300km", "400km", "450km","500km"};
-        setNubmerPicker(numberPicker,mValues);
-        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener(){
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        setBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
 
 
-                switch (numberPicker.getValue()) {
-                    case 0:
-                        pick = 100;
-                        break;
-                    case 1:
-                        pick = 200;
-                        break;
-                    case 2:
-                        pick = 300;
-                        break;
-                    case 3:
-                        pick = 400;
-                        break;
-                    case 4:
-                        pick = 450;
-                        break;
-                    case 5:
-                        pick = 500;
-                        break;
-                    default:
-                        pick = 5000;
-                }
-                Toast.makeText(GroupChatroomList.this, "Selected: " + pick + "km" , Toast.LENGTH_SHORT).show();
-                npDialog.dismiss();
-                getCurrentLocation(pick);
-            }
-        });
+//    public void show(){
+//        final Dialog npDialog = new Dialog(GroupChatroomList.this);
+//        npDialog.setTitle("NumberPicker Example");
+//        npDialog.setContentView(R.layout.seletor_dialog);
+//        Button setBtn = (Button)npDialog.findViewById(R.id.setBtn);
+//        Button cnlBtn = (Button)npDialog.findViewById(R.id.CancelButton_NumberPicker);
+//
+//        final NumberPicker numberPicker = (NumberPicker)npDialog.findViewById(R.id.numberPicker);
+//
+//        String mValues[] = { "100km ", "200km ","300km", "400km", "450km","500km"};
+//        setNubmerPicker(numberPicker,mValues);
+//        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener(){
+//            @Override
+//            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+//                // TODO Auto-generated method stub
+//            }
+//        });
+//
+//        setBtn.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View arg0) {
+//                // TODO Auto-generated method stub
+//
+//
+//                switch (numberPicker.getValue()) {
+//                    case 0:
+//                        pick = 100;
+//                        break;
+//                    case 1:
+//                        pick = 200;
+//                        break;
+//                    case 2:
+//                        pick = 300;
+//                        break;
+//                    case 3:
+//                        pick = 400;
+//                        break;
+//                    case 4:
+//                        pick = 450;
+//                        break;
+//                    case 5:
+//                        pick = 500;
+//                        break;
+//                    default:
+//                        pick = 5000;
+//                }
+//                Toast.makeText(GroupChatroomList.this, "Selected: " + pick + "km" , Toast.LENGTH_SHORT).show();
+//                npDialog.dismiss();
+//                //getCurrentLocation(pick);
+//            }
+//        });
+//
+//        cnlBtn.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                // TODO Auto-generated method stub
+//                npDialog.dismiss();
+//            }
+//        });
+//
+//        npDialog.show();
+//    }
 
-        cnlBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                npDialog.dismiss();
-            }
-        });
-
-        npDialog.show();
-    }
-
-    private void setNubmerPicker(NumberPicker nubmerPicker,String [] numbers){
-        nubmerPicker.setMaxValue(numbers.length-1);
-        nubmerPicker.setMinValue(0);
-        nubmerPicker.setWrapSelectorWheel(false);
-        nubmerPicker.setValue(2);
-        nubmerPicker.setDisplayedValues(numbers);
-    }
+//    private void setNubmerPicker(NumberPicker nubmerPicker,String [] numbers){
+//        nubmerPicker.setMaxValue(numbers.length-1);
+//        nubmerPicker.setMinValue(0);
+//        nubmerPicker.setWrapSelectorWheel(false);
+//        nubmerPicker.setValue(2);
+//        nubmerPicker.setDisplayedValues(numbers);
+//    }
 
 
 
