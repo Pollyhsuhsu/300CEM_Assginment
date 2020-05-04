@@ -20,6 +20,8 @@ import com.example.a300cem_android_assignment.GroupChatroomList;
 import com.example.a300cem_android_assignment.R;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
 
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
@@ -38,31 +40,33 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         int group_id = getItem(position).getChatroom_id();
         int created_by = getItem(position).getCreated_by();
-        final String group_name = getItem(position).getChartroom_name();
+        String group_name = getItem(position).getChartroom_name();
         String group_desc = getItem(position).getChatroom_desc();
         String group_icon = getItem(position).getChatroom_icon();
         String created_at = getItem(position).getCreated_at();
-        ModelChatroom modelChatroom = new ModelChatroom(group_id,created_by,group_name,group_icon,group_desc,created_at);
+        double longitude = getItem(position).getLongitude();
+        double latitude = getItem(position).getLatitude();
+        double distance = getItem(position).getDistance();
+        ModelChatroom modelChatroom = new ModelChatroom(group_id, created_by, group_name, group_icon, group_desc, created_at, longitude, latitude, distance);
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         convertView = inflater.inflate(mResource, parent, false);
-
-        RelativeLayout linear = (RelativeLayout)convertView.findViewById(R.id.linear);
-                //ImageView groupIconIv;
+        //ImageView groupIconIv;
         TextView groupTitleTv = (TextView) convertView.findViewById(R.id.groupTitleTv);
-//        TextView nameTv
-//        TextView messageTv
-//        TextView timeTv;
+
+//      TextView nameTv = (TextView) convertView.findViewById(R.id.groupTitleTv);
+//      TextView messageTv
+        TextView timeTv = (TextView) convertView.findViewById(R.id.timeTv);
 
         groupTitleTv.setText(group_name);
-//        linear.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getApp, Dashboard.class);
-//                intent.putExtra("currentUser", currentUser);
-//                startActivity(intent);
-//            }
-//        });
+        timeTv.setText(formatDouble3(distance) + " km");
 
         return convertView;
+    }
+
+    public static String formatDouble3(double d) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        // 保留3位小数
+        nf.setMaximumFractionDigits(3);
+        return nf.format(d);
     }
 }

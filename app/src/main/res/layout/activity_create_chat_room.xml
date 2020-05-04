@@ -29,49 +29,66 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_group_return"></ImageView>
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            android:background="#eee">
+            android:background="#eee"
+            android:padding="20dp">
 
             <com.blogspot.atifsoftwares.circularimageview.CircularImageView
-                android:layout_height="100dp"
-                android:layout_width="100dp"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/groupIconIv"
-                android:src="@drawable/ic_group_primary"/>
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_group_primary" />
 
             <EditText
-                    android:id="@+id/groupTitleEt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:layout_below="@id/groupIconIv"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:hint="Group Title"/>
+                android:id="@+id/groupTitleEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/groupIconIv"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:hint="Group Title"
+                android:padding="10dp" />
 
             <EditText
                 android:id="@+id/groupDescriptionEt"
-                android:minHeight="100dp"
-                android:gravity="top"
-                android:inputType="textMultiLine|textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:layout_below="@id/groupTitleEt"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
-                android:hint="Group Description..."/>
+                android:background="@color/white"
+                android:gravity="top"
+                android:hint="Group Description..."
+                android:inputType="textMultiLine|textCapSentences"
+                android:minHeight="100dp"
+                android:padding="10dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
                 android:id="@+id/createGroupBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/ic_done_white"
-                android:layout_alignParentRight="true" />
+                android:src="@drawable/ic_done_white" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/groupIconIv"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="-210dp"
+                android:autoLink="all"
+                android:drawableLeft="@drawable/ic_pin"
+                android:text="Location"
+                android:textSize="12sp" />
+
         </RelativeLayout>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

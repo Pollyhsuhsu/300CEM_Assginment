@@ -57,7 +57,7 @@
         </menu>
     </item>
 
-    <item android:title="Share">
+    <item android:title="Setting">
         <menu>
             <group android:checkableBehavior="single">
                 <item
@@ -65,8 +65,8 @@
                     android:title="Home"/>
 
                 <item
-                    android:id="@+id/rate_us"
-                    android:title="1"/>
+                    android:id="@+id/Log_out"
+                    android:title="Logout"/>
 
             </group>
         </menu>

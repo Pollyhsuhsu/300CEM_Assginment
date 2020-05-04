@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,6 +23,7 @@ import com.example.a300cem_android_assignment.HomeAdapter.FeaturedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.FeaturedHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedHelperClass;
+import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
 
@@ -69,8 +71,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     }
 
     private void getCurrentUserInfo() {
-        Intent intent = getIntent();
-        currentUser = (ModelUser) intent.getSerializableExtra("currentUser");
+        SessionManagement sessionManagement = new SessionManagement(Dashboard.this);
+        int userID = sessionManagement.getSession();
+        Log.d("userID", String.valueOf(userID));
     }
     private void naviagtionDrawer() {
         //Naviagtion Drawer
@@ -174,16 +177,23 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Intent intent;
         switch(menuItem.getItemId()){
             case R.id.nav_home:
                 break;
             case R.id.nav_group_chat:
-                Intent intent = new Intent(this,GroupChatroomList.class);
-                intent.putExtra("currentUser", currentUser);
+                intent = new Intent(this,GroupChatroomList.class);
                 startActivity(intent);
+                break;
+            case R.id.Log_out:
+                Logout.logout(this);
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+//    SessionManagement sessionManagement = new SessionManagement(Login.this);
+//    int userID = sessionManagement.getSession();
+//        Log.d("userID", String.valueOf(userID));
 }

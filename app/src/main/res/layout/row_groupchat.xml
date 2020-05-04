@@ -8,7 +8,6 @@
     app:cardCornerRadius="25dp"
     app:contentPadding="3dp"
     app:cardElevation="10dp">
-
     <RelativeLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
@@ -62,5 +61,4 @@
                 android:singleLine="true"/>
 
     </RelativeLayout>
-
 </androidx.cardview.widget.CardView>

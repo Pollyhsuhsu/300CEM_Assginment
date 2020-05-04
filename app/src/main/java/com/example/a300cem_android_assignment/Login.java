@@ -3,10 +3,14 @@ package com.example.a300cem_android_assignment;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -87,6 +92,27 @@ public class Login extends AppCompatActivity {
 //        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        checkSession();
+    }
+
+    private void checkSession() {
+        //check if user is logged in
+        //if user is logged in --> move to mainActivity
+        SessionManagement sessionManagement = new SessionManagement(Login.this);
+        int userID = sessionManagement.getSession();
+
+        if(userID != -1) {
+            //user id logged in and move to mainActivity
+            moveToMainActivity();
+        }else{
+
+        }
+    }
+
     public void userLogin(View view){
         if(!vaildataPassword() || !vaildataEmail() ){
             return;
@@ -114,19 +140,30 @@ public class Login extends AppCompatActivity {
                     currentUser.setEmail(data.getString("email"));
                     currentUser.setCreated_at(data.getString("created_at"));
                     currentUser.setUpdated_at(data.getString("updated_at"));
-                    suss(currentUser);
+                   // suss(currentUser);
+
+                    SessionManagement sessionManagement = new SessionManagement(Login.this);
+                    sessionManagement.saveSession(currentUser);
+                    moveToMainActivity();
                 }
             }
         },"/users/authenticate",jsonBodyObj);
     }
 
-    //private void suss(JSONObject resultData) throws JSONException {
-      private void suss(ModelUser currentUser) throws JSONException {
+    private void suss(ModelUser currentUser) throws JSONException {
         //Log.d(TAG,currentUser.toString());
+        SessionManagement sessionManagement = new SessionManagement(Login.this);
+        sessionManagement.saveSession(currentUser);
+
+        moveToMainActivity();
+    }
+
+    private void moveToMainActivity() {
         Intent intent = new Intent(this, Dashboard.class);
-        intent.putExtra("currentUser", currentUser);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
 
     private Boolean vaildataPassword(){
         String val = password.getEditText().getText().toString();
