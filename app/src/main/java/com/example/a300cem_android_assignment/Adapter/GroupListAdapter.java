@@ -38,6 +38,8 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        System.out.println(position);
+        System.out.println(parent);
         int group_id = getItem(position).getChatroom_id();
         int created_by = getItem(position).getCreated_by();
         String group_name = getItem(position).getChartroom_name();
@@ -48,6 +50,7 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
         double latitude = getItem(position).getLatitude();
         double distance = getItem(position).getDistance();
         ModelChatroom modelChatroom = new ModelChatroom(group_id, created_by, group_name, group_icon, group_desc, created_at, longitude, latitude, distance);
+                ;
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         convertView = inflater.inflate(mResource, parent, false);
         //ImageView groupIconIv;
@@ -66,7 +69,7 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
     public static String formatDouble3(double d) {
         NumberFormat nf = NumberFormat.getNumberInstance();
         // 保留3位小数
-        nf.setMaximumFractionDigits(3);
+        nf.setMaximumFractionDigits(2);
         return nf.format(d);
     }
 }
