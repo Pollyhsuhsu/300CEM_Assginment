@@ -20,7 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.a300cem_android_assignment.Session.SessionManagement;
+import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
 import com.example.a300cem_android_assignment.Adapter.GroupChatAdapter;
 import com.example.a300cem_android_assignment.models.ModelUser;
@@ -33,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -52,7 +56,7 @@ public class GroupChatActivity extends AppCompatActivity {
     String username;
 
     private Toolbar toolbar;
-    private ImageView imageView;
+    private ImageView groupIconIv;
     private ImageButton attachBtn,sendBtn;
     private TextView groupTitleTv;
     private EditText messageEt;
@@ -70,7 +74,7 @@ public class GroupChatActivity extends AppCompatActivity {
 
         //Hook
         toolbar =(Toolbar)  findViewById(R.id.toolbar);
-        imageView = (ImageView) findViewById(R.id.groupIconIv);
+        groupIconIv = (ImageView) findViewById(R.id.groupIconIv);
         groupTitleTv =(TextView)  findViewById(R.id.groupTitleTv);
         attachBtn =(ImageButton)  findViewById(R.id.attacBtn);
         messageEt =(EditText)  findViewById(R.id.messageEt);
@@ -143,6 +147,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private void setCurrentUserInfo(JSONObject result) throws JSONException {
         username = result.getString("username");
     }
+
     private void sendMessage(final String message) {
         // timestamp
         String timestamp = "" + System.currentTimeMillis();
@@ -172,20 +177,83 @@ public class GroupChatActivity extends AppCompatActivity {
                         Toast.makeText(GroupChatActivity.this,"" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+        dbcheckifentryExistofNot();
+    }
+
+    private void dbcheckifentryExistofNot(){
+        CallApi callApi = new CallApi();
+        callApi.json_get(new CallApi.VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) throws JSONException {
+                //groupChatLists = new ArrayList<>();
+                if(!result.getBoolean("exists")) {
+                    fbcheckifentryExistofNot();
+                }
+            }
+        },"/participant/checkexists/" + currentUserID + "&" + currentChatroom.getChatroom_id());
+    }
+
+    private void fbcheckifentryExistofNot(){
+        DatabaseReference GroupNameRef = FireBaseDatabase.getInstance().getReference().child("Groups");
+        GroupNameRef.child(Integer.toString(currentChatroom.getChatroom_id())).child("Messages")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        ArrayList<Integer> arrayList = new ArrayList<>();
+                        for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                            ModelGroupChat model = ds.getValue(ModelGroupChat.class);
+                            arrayList.add(model.getSender_id());
+                        }
+                        boolean ans = arrayList.contains(currentUserID);
+
+                        if(ans){
+                            joinChatroom();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void joinChatroom(){
+        CallApi callApi = new CallApi();
+        JSONObject jsonBodyObj = new JSONObject();
+        try{
+            jsonBodyObj.put("user_id", currentUserID);
+            jsonBodyObj.put("chatroom_id", currentChatroom.getChatroom_id());
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        callApi.json_post(new CallApi.VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject response) throws JSONException {
+                if(response.getBoolean("status")){
+
+                }
+            }
+        },"/participant/join",jsonBodyObj);
     }
 
     private void getcurrentChatRoomInfo() {
-//        CallApi callApi = new CallApi();
-//        callApi.json_get(new CallApi.VolleyCallback() {
-//            @Override
-//            public void onSuccessResponse(JSONObject response) throws JSONException {
-//                SetcurrentChatRoomInfo(response.getJSONObject("data"));
-//            }
-//        },"/chatrooms/querybyId/1");
+
+        /*
+        CallApi callApi = new CallApi();
+        callApi.json_get(new CallApi.VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject response) throws JSONException {
+                SetcurrentChatRoomInfo(response.getJSONObject("data"));
+            }
+        },"/chatrooms/querybyId/1");
+        */
 
         Intent intent = getIntent();
         currentChatroom = (ModelChatroom) intent.getSerializableExtra("currentChatroom");
         groupTitleTv.setText(currentChatroom.getChartroom_name());
+        stringtoImage(currentChatroom.getChatroom_icon());
         loadGroupMessage(currentChatroom);
     }
 
@@ -215,7 +283,6 @@ public class GroupChatActivity extends AppCompatActivity {
         }
         return sb.toString().substring(0, 7);
     }
-
 
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GroupChatActivity.this);
@@ -247,4 +314,32 @@ public class GroupChatActivity extends AppCompatActivity {
         // Finally, display the dialog when user press back button
         dialog.show();
     }
+
+    private void stringtoImage(String images){
+        Log.d("image", images);
+
+        /*
+        Picasso.get().load(Uri.parse(images))
+        .error(R.drawable.ic_group_primary)
+        .priority(Picasso.Priority.HIGH)
+        .noFade()
+        .memoryPolicy(MemoryPolicy.NO_CACHE,MemoryPolicy.NO_STORE)
+        .into(groupIconIv);
+        */
+
+        ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+        imageLoader.get(images, new ImageLoader.ImageListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                groupIconIv.setImageResource(R.drawable.ic_group_primary);
+            }
+
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                groupIconIv.setImageBitmap(response.getBitmap());
+            }
+        });
+
+    }
+
 }

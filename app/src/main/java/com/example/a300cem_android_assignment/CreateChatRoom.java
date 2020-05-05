@@ -28,7 +28,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +42,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,8 +51,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class CreateChatRoom extends AppCompatActivity{
 
@@ -119,7 +115,7 @@ public class CreateChatRoom extends AppCompatActivity{
         returnPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CreateChatRoom.this, GroupChatroomList.class);
+                Intent intent = new Intent(CreateChatRoom.this, NyGroupChatroomList.class);
                 startActivity(intent);
             }
         });
@@ -220,12 +216,32 @@ public class CreateChatRoom extends AppCompatActivity{
                 modelChatroom.setCreated_at(data.getString("created_at"));
                 modelChatroom.setLatitude(data.getDouble("latitude"));
                 modelChatroom.setLongitude(data.getDouble("longitude"));
+                joinChatroom(data.getInt("id"));
                 Toast.makeText(CreateChatRoom.this,"Group created successfully", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), GroupChatActivity.class);
                 intent.putExtra("currentChatroom", modelChatroom);
                 startActivity(intent);
             }
         },"/chatrooms/querybyId/" + insertId);
+    }
+
+    private void joinChatroom(int custom_id){
+        CallApi callApi = new CallApi();
+        JSONObject jsonBodyObj = new JSONObject();
+        try{
+            jsonBodyObj.put("user_id", userID);
+            jsonBodyObj.put("chatroom_id", custom_id);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        callApi.json_post(new CallApi.VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject response) throws JSONException {
+                if(response.getBoolean("status")){
+
+                }
+            }
+        },"/participant/join",jsonBodyObj);
     }
     private void showImagePickDialog() {
         //options to pick image form

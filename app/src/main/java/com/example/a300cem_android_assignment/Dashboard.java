@@ -182,7 +182,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             case R.id.nav_home:
                 break;
             case R.id.nav_group_chat:
-                intent = new Intent(this,GroupChatroomList.class);
+                intent = new Intent(this, ExistsGroupChatroomList.class);
                 startActivity(intent);
                 break;
             case R.id.Log_out:
@@ -193,7 +193,4 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         return true;
     }
 
-//    SessionManagement sessionManagement = new SessionManagement(Login.this);
-//    int userID = sessionManagement.getSession();
-//        Log.d("userID", String.valueOf(userID));
 }
