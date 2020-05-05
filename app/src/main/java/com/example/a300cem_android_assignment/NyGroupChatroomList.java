@@ -12,12 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -28,11 +24,9 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.example.a300cem_android_assignment.Adapter.ChatroomListAdapter;
 import com.example.a300cem_android_assignment.Adapter.GroupListAdapter;
 import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
-import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -47,16 +41,24 @@ import java.util.ArrayList;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 //
-public class GroupChatroomList extends AppCompatActivity {
+public class NyGroupChatroomList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private ArrayList<ModelChatroom> groupChatLists = new ArrayList<>();;
     private static final int REQUEST_CODE_LOCATION_PERMISSON = 1;
     private ListView groupsLv;
+    private ImageView setting_distance;
     private RelativeLayout createGroupChatroom;
     private int currentUserID;
     private int pick = 0;
 
-    ImageView setting_distance;
 
+
+    static final float END_SCALE = 0.7f;
+
+    //Drawer Menu
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    ImageView menuIcon;
+    LinearLayout contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +66,26 @@ public class GroupChatroomList extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_group_chatroom_list);
 
+        //Menu Hooks
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+        menuIcon = findViewById(R.id.menu_icon);
+        contentView = findViewById(R.id.content);
+
         //Hook
         groupsLv =(ListView) findViewById(R.id.groupsLv);
         createGroupChatroom = (RelativeLayout) findViewById(R.id.createGroupChatroom);
-        setting_distance = findViewById(R.id.setting_distance)
+        setting_distance = findViewById(R.id.setting_distance);
 
-        ;
+        naviagtionDrawer();
         getCurrentUserInfo();
 
-        //loadGroupChatsList(latitude,longitude, pick);
-        //loadGroupChatsList();
+
 
         createGroupChatroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroupChatroomList.this, CreateChatRoom.class);
+                Intent intent = new Intent(NyGroupChatroomList.this, CreateChatRoom.class);
                 startActivity(intent);
             }
         });
@@ -98,7 +105,7 @@ public class GroupChatroomList extends AppCompatActivity {
                 getApplication(), ACCESS_FINE_LOCATION
         )!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(
-                    GroupChatroomList.this,
+                    NyGroupChatroomList.this,
                     new String[]{ACCESS_FINE_LOCATION},
                     REQUEST_CODE_LOCATION_PERMISSON
             );
@@ -116,8 +123,8 @@ public class GroupChatroomList extends AppCompatActivity {
             }else{
                 Toast.makeText(this,"Permission denied:", Toast.LENGTH_SHORT).show();
                 Intent intent = null;
-                GroupChatroomList.this.setResult(RESULT_OK, intent);
-                GroupChatroomList.this.finish();
+                NyGroupChatroomList.this.setResult(RESULT_OK, intent);
+                NyGroupChatroomList.this.finish();
             }
         }
     }
@@ -128,13 +135,13 @@ public class GroupChatroomList extends AppCompatActivity {
         locationRequest.setFastestInterval(3000);
         locationRequest.setPriority(locationRequest.PRIORITY_HIGH_ACCURACY);
 
-        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
+        LocationServices.getFusedLocationProviderClient(NyGroupChatroomList.this)
                 .requestLocationUpdates(locationRequest, new LocationCallback(){
 
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         super.onLocationResult(locationResult);
-                        LocationServices.getFusedLocationProviderClient(GroupChatroomList.this)
+                        LocationServices.getFusedLocationProviderClient(NyGroupChatroomList.this)
                                 .removeLocationUpdates(this);
                         if(locationRequest != null && locationResult.getLocations().size() > 0){
                             int latestLocationIndex = locationResult.getLocations().size() - 1;
@@ -151,7 +158,7 @@ public class GroupChatroomList extends AppCompatActivity {
     }
 
     private void getCurrentUserInfo() {
-        SessionManagement sessionManagement = new SessionManagement(GroupChatroomList.this);
+        SessionManagement sessionManagement = new SessionManagement(NyGroupChatroomList.this);
         currentUserID = sessionManagement.getSession();
     }
 
@@ -220,7 +227,7 @@ public class GroupChatroomList extends AppCompatActivity {
     }
 
     private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists){
-       GroupListAdapter groupListAdapter = new GroupListAdapter(GroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
+       GroupListAdapter groupListAdapter = new GroupListAdapter(NyGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
        if(groupsLv.getAdapter() == null) {
             groupsLv.setAdapter(groupListAdapter);
         }else{
@@ -253,7 +260,7 @@ public class GroupChatroomList extends AppCompatActivity {
     }
 
     public void show(){
-        final Dialog npDialog = new Dialog(GroupChatroomList.this);
+        final Dialog npDialog = new Dialog(NyGroupChatroomList.this);
         npDialog.setTitle("NumberPicker Example");
         npDialog.setContentView(R.layout.seletor_dialog);
         Button setBtn = (Button)npDialog.findViewById(R.id.setBtn);
@@ -299,7 +306,7 @@ public class GroupChatroomList extends AppCompatActivity {
                         pick = 5000;
                         break;
                 }
-                Toast.makeText(GroupChatroomList.this, "Selected: " + pick + "km" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(NyGroupChatroomList.this, "Selected: " + pick + "km" , Toast.LENGTH_SHORT).show();
                 npDialog.dismiss();
                 getCurrentLocation(pick);
             }
@@ -324,5 +331,69 @@ public class GroupChatroomList extends AppCompatActivity {
         nubmerPicker.setDisplayedValues(numbers);
     }
 
+    private void naviagtionDrawer() {
+        //Naviagtion Drawer
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setCheckedItem(R.id.nav_group_chat);
 
+        menuIcon.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(drawerLayout.isDrawerVisible(GravityCompat.START))
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                else drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        animateNavigationDrawer();
+    }
+
+    private void animateNavigationDrawer() {
+        //Add any color or remove it to use the default one!
+        //To make it transparent use Color.Transparent in side setScrimColor();
+        //drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // Scale the View based on current slide offset
+                final float diffScaledOffset = slideOffset * (1 - END_SCALE);
+                final float offsetScale = 1 - diffScaledOffset;
+                contentView.setScaleX(offsetScale);
+                contentView.setScaleY(offsetScale);
+
+                // Translate the View, accounting for the scaled width
+                final float xOffset = drawerView.getWidth() * slideOffset;
+                final float xOffsetDiff = contentView.getWidth() * diffScaledOffset / 2;
+                final float xTranslation = xOffset - xOffsetDiff;
+                contentView.setTranslationX(xTranslation);
+            }
+        });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerVisible(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else
+            super.onBackPressed();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Intent intent;
+        switch(menuItem.getItemId()){
+            case R.id.nav_home:
+                intent = new Intent(this,Dashboard.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_group_chat:
+                break;
+            case R.id.Log_out:
+                Logout.logout(this);
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

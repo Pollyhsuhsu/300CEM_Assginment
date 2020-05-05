@@ -58,7 +58,6 @@ public class GroupChatAdapter extends RecyclerView.Adapter<GroupChatAdapter.Hold
         cal.setTimeInMillis(Long.parseLong(timestamp));
         String dataTime = DateFormat.format("dd/MM/yyyy hh:mm aa", cal).toString();
 
-        Log.d("error400",senderName);
         holder.messageTv.setText(message);
 
         if(senderUid != currentUser_id){

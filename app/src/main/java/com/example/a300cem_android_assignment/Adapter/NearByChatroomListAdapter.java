@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a300cem_android_assignment.R;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ChatroomListAdapter extends RecyclerView.Adapter<ChatroomListAdapter.HolderGroupChatList>{
+public class NearByChatroomListAdapter extends RecyclerView.Adapter<NearByChatroomListAdapter.HolderGroupChatList>{
     private Context context;
     private ArrayList<ModelChatroom> groupChatLists;
 
-    public ChatroomListAdapter(Context context, ArrayList<ModelChatroom> groupChatLists) {
+    public NearByChatroomListAdapter(Context context, ArrayList<ModelChatroom> groupChatLists) {
         this.context = context;
         this.groupChatLists = groupChatLists;
     }
