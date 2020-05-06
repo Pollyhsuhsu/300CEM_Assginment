@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExistsGroupChatroomList"></activity>
+        <activity android:name=".Wareable.Wareable"></activity>
+        <activity android:name=".ExistsGroupChatroomList" />
         <activity android:name=".GroupChatroomList2" />
 
         <uses-library
@@ -37,7 +38,6 @@
             android:value="AIzaSyDuvYl_heTaR4YodYHbZt9aUX3fkRUeLuw" />
 
         <activity android:name=".GoogleMap.GMapCurrLocation" />
-        <activity android:name=".GoogleMap.googleMap" />
         <activity android:name=".NyGroupChatroomList" />
         <activity android:name=".CreateChatRoom" />
         <activity android:name=".GroupChatActivity" />

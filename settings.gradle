@@ -1,2 +1,3 @@
 rootProject.name='300CEM_Assginment'
 include ':app'
+':wear'
