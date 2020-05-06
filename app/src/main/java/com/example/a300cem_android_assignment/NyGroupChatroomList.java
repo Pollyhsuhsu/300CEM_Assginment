@@ -335,7 +335,7 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
         //Naviagtion Drawer
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_group_chat);
+        navigationView.setCheckedItem(R.id.nav_nearby);
 
         menuIcon.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -387,7 +387,11 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
                 intent = new Intent(this,Dashboard.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_group_chat:
+            case R.id.nav_nearby:
+                break;
+            case R.id.nav_message:
+                intent = new Intent(this,ExistsGroupChatroomList.class);
+                startActivity(intent);
                 break;
             case R.id.Log_out:
                 Logout.logout(this);

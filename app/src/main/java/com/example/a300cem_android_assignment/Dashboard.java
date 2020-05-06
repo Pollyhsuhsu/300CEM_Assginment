@@ -31,9 +31,10 @@ import java.util.ArrayList;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private ImageView near_by;
     RecyclerView featuredRecycler, mostViewedRecycler, categoriesRecycler;
     RecyclerView.Adapter adapter;
-    ModelUser currentUser;
+
     private GradientDrawable gradient1, gradient2, gradient3, gradient4;
     static final float END_SCALE = 0.7f;
 
@@ -54,11 +55,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         featuredRecycler = findViewById(R.id.featured_recycler);
         mostViewedRecycler = findViewById(R.id.mostViewedRecycler);
         categoriesRecycler = findViewById(R.id.categories_recycler);
+        near_by = findViewById(R.id.near_by);
 
         //Menu Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
-
         menuIcon = findViewById(R.id.menu_icon);
         contentView = findViewById(R.id.content);
 
@@ -68,6 +69,14 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         categoriesRecycler();
         naviagtionDrawer();
         getCurrentUserInfo();
+
+        near_by.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard.this, NyGroupChatroomList.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getCurrentUserInfo() {
@@ -181,8 +190,12 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         switch(menuItem.getItemId()){
             case R.id.nav_home:
                 break;
-            case R.id.nav_group_chat:
-                intent = new Intent(this, ExistsGroupChatroomList.class);
+            case R.id.nav_nearby:
+                intent = new Intent(this,NyGroupChatroomList.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_message:
+                intent = new Intent(this,ExistsGroupChatroomList.class);
                 startActivity(intent);
                 break;
             case R.id.Log_out:

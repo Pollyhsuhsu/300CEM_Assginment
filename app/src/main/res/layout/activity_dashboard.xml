@@ -115,6 +115,7 @@
                         android:layout_margin="10dp"
                         android:layout_width="60dp">
                         <ImageView
+                            android:id="@+id/near_by"
                             android:layout_centerInParent="true"
                             android:layout_height="30dp"
                             android:layout_width="30dp"
@@ -124,7 +125,7 @@
                         android:gravity="center_horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/dogs"
+                        android:text="Near by"
                         android:textAlignment="center"/>
                 </LinearLayout>
 

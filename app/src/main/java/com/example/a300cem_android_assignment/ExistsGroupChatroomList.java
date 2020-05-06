@@ -7,14 +7,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.example.a300cem_android_assignment.Adapter.ExistsChatroomListAdapter;
 import com.example.a300cem_android_assignment.Adapter.GroupListAdapter;
 import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
@@ -28,23 +28,25 @@ import java.util.ArrayList;
 
 public class ExistsGroupChatroomList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     static final float END_SCALE = 0.7f;
-
-    private ArrayList<ModelChatroom> groupChatLists = new ArrayList<>();;
-    int currentUserID;
-    private ListView groupsLv;
-
     //Drawer Menu
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ImageView menuIcon;
     LinearLayout contentView;
 
+    //Variable
+    private ArrayList<ModelChatroom> groupChatLists
+            = new ArrayList<>();
+    private int currentUserID;
+
+    //
+    private ListView groupsLv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_chatroom_ex_list);
+        setContentView(R.layout.activity_exists_group_chatroom_list);
 
         //Menu Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -52,29 +54,23 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
         menuIcon = findViewById(R.id.menu_icon);
         contentView = findViewById(R.id.content);
 
-
         //Hook
         groupsLv =(ListView) findViewById(R.id.groupsLv);
 
-        getCurrentUserID();
+
+        //Menu Method
         naviagtionDrawer();
+        getCurrentUserInfo();
+
     }
 
-    private void getCurrentUserID() {
+    private void getCurrentUserInfo() {
         SessionManagement sessionManagement = new SessionManagement(ExistsGroupChatroomList.this);
         currentUserID = sessionManagement.getSession();
-
-        CallApi callApi = new CallApi();
-        callApi.json_get(new CallApi.VolleyCallback() {
-            @Override
-            public void onSuccessResponse(JSONObject response) throws JSONException {
-                //setCurrentUserInfo(response.getJSONObject("data"));
-                loadGroupChatsList(currentUserID);
-            }
-        },"/customers/querybyId/" + currentUserID);
+        loadGroupChatsList(currentUserID);
     }
 
-    private void loadGroupChatsList(int currentUserID){
+    private void loadGroupChatsList(int cuser_id){
         if(!groupChatLists.isEmpty()){
             groupChatLists.clear();
         };
@@ -83,11 +79,13 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
         callApi.json_get(new CallApi.VolleyCallback() {
             @Override
             public void onSuccessResponse(JSONObject result) throws JSONException {
+                //groupChatLists = new ArrayList<>();
                 if(result.getBoolean("status")) {
                     JSONArray data = result.getJSONArray("data");
-                    if(data != null || data.length() > 0) {
+                    if(data != null || data.length()>0) {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject obj = data.getJSONObject(i);
+                            Log.d("obj",obj.toString());
                             int id = obj.getInt("id");
                             String chatroom_name = obj.getString("chatroom_name");
                             String chatroom_desc = obj.getString("chatroom_desc");
@@ -96,7 +94,6 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
                             String created_at = obj.getString("created_at");
                             double longitude = obj.getDouble("longitude");
                             double latitude = obj.getDouble("latitude");
-                            //double distance = obj.getDouble("distance");
 
                             ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude, latitude, 0);
                             groupChatLists.add(modelChatroom);
@@ -105,26 +102,46 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
                     }
                 }
             }
-        },"/participant/querybyuserid/" + currentUserID);
+        },"/participant/querybyuserid/" + cuser_id);
     }
 
-    private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists) {
-        ExistsChatroomListAdapter groupListAdapter = new ExistsChatroomListAdapter(ExistsGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
-        if (groupsLv.getAdapter() == null) {
+    private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists){
+        GroupListAdapter groupListAdapter = new GroupListAdapter(ExistsGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
+        if(groupsLv.getAdapter() == null) {
             groupsLv.setAdapter(groupListAdapter);
-        } else {
+        }else{
             groupsLv.setAdapter(groupListAdapter);
             groupListAdapter.notifyDataSetChanged();
             groupsLv.invalidateViews();
             groupsLv.refreshDrawableState();
         }
-    }
 
+
+        groupsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println(groupChatLists.get(position).getChatroom_id());
+                if(groupChatLists!=null) {
+                    ModelChatroom modelChatroom = new ModelChatroom();
+                    modelChatroom.setChatroom_id(groupChatLists.get(position).getChatroom_id());
+                    modelChatroom.setCreated_by(groupChatLists.get(position).getCreated_by());
+                    modelChatroom.setChartroom_name(groupChatLists.get(position).getChartroom_name());
+                    modelChatroom.setChatroom_desc(groupChatLists.get(position).getChatroom_desc());
+                    modelChatroom.setChatroom_icon(groupChatLists.get(position).getChatroom_icon());
+                    modelChatroom.setCreated_at(groupChatLists.get(position).getCreated_at());
+
+                    Intent intent = new Intent(getApplicationContext(), GroupChatActivity.class);
+                    intent.putExtra("currentChatroom", modelChatroom);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
     private void naviagtionDrawer() {
         //Naviagtion Drawer
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_group_chat);
+        navigationView.setCheckedItem(R.id.nav_message);
 
         menuIcon.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -176,7 +193,11 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
                 intent = new Intent(this,Dashboard.class);
                 startActivity(intent);
                 break;
-            case R.id.nav_group_chat:
+            case R.id.nav_nearby:
+                intent = new Intent(this,NyGroupChatroomList.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_message:
                 break;
             case R.id.Log_out:
                 Logout.logout(this);

@@ -12,7 +12,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,6 +23,7 @@ android {
         }
     }
 }
+repositories { jcenter() }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -51,6 +52,24 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:11.8.0'
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
     implementation 'com.karumi:dexter:6.1.0'
+    //
+    testImplementation 'junit:junit:4.12'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+    // required if you want to use Mockito for unit tests
+    testImplementation 'org.mockito:mockito-core:2.8.9'
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+    testImplementation 'org.json:json:20140107'
+    //Espresso相關依賴
+    androidTestImplementation 'com.android.support:support-annotations:24.1.1'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.0'
+
+    //@標籤使用的依賴
+    androidTestImplementation 'androidx.test:core:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

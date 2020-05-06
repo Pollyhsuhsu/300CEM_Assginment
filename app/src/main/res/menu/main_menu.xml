@@ -4,31 +4,34 @@
         <item
             android:id="@+id/nav_home"
             android:title="Home"/>
-
-<!--        <item-->
-<!--            android:id="@+id/nav_categories"-->
-<!--            android:title="2"/>-->
-
-<!--        <item-->
-<!--            android:id="@+id/nav_add_missing_place"-->
-<!--            android:title="3"/>-->
-
     </group>
 
-    <item android:title="NearBy">
+    <item android:title="Find">
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_group_chat"
-                    android:title="Chatroom"/>
+                    android:id="@+id/nav_nearby"
+                    android:title="Nearby"/>
 
-                <item
-                    android:id="@+id/nav_profile"
-                    android:title="1"/>
+            </group>
+        </menu>
+    </item>
 
+
+    <item android:title="Content">
+        <menu>
+            <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_logout"
-                    android:title="2"/>
+                    android:id="@+id/nav_message"
+                    android:title="Message"/>
+
+<!--                <item-->
+<!--                    android:id="@+id/nav_profile"-->
+<!--                    android:title="1"/>-->
+
+<!--                <item-->
+<!--                    android:id="@+id/nav_logout"-->
+<!--                    android:title="2"/>-->
 
             </group>
         </menu>
