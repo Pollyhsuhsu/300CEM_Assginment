@@ -24,9 +24,9 @@ import java.util.Map;
 public class CallApi{
 
     // Eyeglass Store
-    String  baseURL = "http://192.168.0.103:1337";
+    //String  baseURL = "http://192.168.0.103:1337";
     // Home
-    //String  baseURL = "http://192.168.0.179:1337";
+    String  baseURL = "http://192.168.0.179:1337";
     String tag_json_object = null;
 
     public void json_get(final VolleyCallback callback, String s){
