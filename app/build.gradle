@@ -72,8 +72,7 @@ dependencies {
     androidTestImplementation 'androidx.test:core:1.1.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test:runner:1.1.0'
-
-
+    implementation 'com.facebook.shimmer:shimmer:0.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

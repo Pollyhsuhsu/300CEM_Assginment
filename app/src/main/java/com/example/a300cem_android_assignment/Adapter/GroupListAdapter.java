@@ -1,6 +1,7 @@
 package com.example.a300cem_android_assignment.Adapter;
 
 import android.content.Context;
+import android.os.Handler;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.a300cem_android_assignment.R;
 import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,39 +48,53 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
 
         int group_id = getItem(position).getChatroom_id();
         int created_by = getItem(position).getCreated_by();
-        String group_name = getItem(position).getChartroom_name();
-        String group_desc = getItem(position).getChatroom_desc();
-        String group_icon = getItem(position).getChatroom_icon();
+        final String group_name = getItem(position).getChartroom_name();
+        final String group_desc = getItem(position).getChatroom_desc();
+        final String group_icon = getItem(position).getChatroom_icon();
         String created_at = getItem(position).getCreated_at();
         double longitude = getItem(position).getLongitude();
         double latitude = getItem(position).getLatitude();
-        double distance = getItem(position).getDistance();
+        final double distance = getItem(position).getDistance();
 
-        ModelChatroom modelChatroom = new ModelChatroom(group_id, created_by, group_name, group_icon, group_desc, created_at, longitude, latitude, distance);
+        final ModelChatroom modelChatroom = new ModelChatroom(group_id, created_by, group_name, group_icon, group_desc, created_at, longitude, latitude, distance);
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         convertView = inflater.inflate(mResource, parent, false);
 
-        String toStringcontext = mcontext+ "";
-        if(toStringcontext.contains("NyGroupChatroomList")){
-            TextView timeTv = (TextView) convertView.findViewById(R.id.timeTv);
-            timeTv.setText(formatDouble3(distance) + " km");
+        final ShimmerFrameLayout shimmerFrameLayout = (ShimmerFrameLayout) convertView.findViewById(R.id.shimmerFrameLayout);
+        final TextView nameTv = (TextView) convertView.findViewById(R.id.nameTv);
+        final TextView messageTv= (TextView) convertView.findViewById(R.id.messageTv);
+        final TextView timeTv = (TextView) convertView.findViewById(R.id.timeTv);
+        final ImageView groupIconIv = (ImageView) convertView.findViewById(R.id.groupIconIv);
+        final TextView groupTitleTv = (TextView) convertView.findViewById(R.id.groupTitleTv);
 
-        }else {
-            TextView nameTv = (TextView) convertView.findViewById(R.id.nameTv);
-            TextView messageTv= (TextView) convertView.findViewById(R.id.messageTv);
-            TextView timeTv = (TextView) convertView.findViewById(R.id.timeTv);
-            messageTv.setText("");
-            timeTv.setText("");
-            nameTv.setText("");
-            loadLastMessage(modelChatroom,messageTv,timeTv,nameTv);
-        }
-        ImageView groupIconIv = (ImageView) convertView.findViewById(R.id.groupIconIv);
-        TextView groupTitleTv = (TextView) convertView.findViewById(R.id.groupTitleTv);
+            final String toStringcontext = mcontext+ "";
 
-        if(group_icon != null){
-           StringtoImage(group_icon,groupIconIv);
-        }
-        groupTitleTv.setText(group_name);
+                shimmerFrameLayout.startShimmer();
+                if (group_icon != null) {
+                    StringtoImage(group_icon, groupIconIv);
+                }
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setShimmer(null);
+
+                    if (toStringcontext.contains("NyGroupChatroomList")) {
+                        timeTv.setText(formatDouble3(distance) + " km");
+                        nameTv.setText(group_desc);
+                        messageTv.setVisibility(View.GONE);
+                    } else {
+                        messageTv.setText("");
+                        timeTv.setText("");
+                        nameTv.setText("");
+                        loadLastMessage(modelChatroom, messageTv, timeTv, nameTv);
+                    }
+                    groupTitleTv.setText(group_name);
+                }
+            },3000);
+
+
 
         //loadLastMessage(modelChatroom, convertView,messageTv,timeTv,nameTv);
         return convertView;
@@ -113,6 +129,7 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 groupIconIv.setImageBitmap(response.getBitmap());
+
             }
         });
 
@@ -159,9 +176,11 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
                     }
                 });
     }
+
     public enum Priority {
         LOW,
         NORMAL,
         HIGH
     }
+
 }

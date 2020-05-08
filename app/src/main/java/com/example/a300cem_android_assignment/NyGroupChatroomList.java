@@ -11,6 +11,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +52,6 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
     private int pick = 0;
 
 
-
     static final float END_SCALE = 0.7f;
 
     //Drawer Menu
@@ -71,7 +71,6 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
         navigationView = findViewById(R.id.navigation_view);
         menuIcon = findViewById(R.id.menu_icon);
         contentView = findViewById(R.id.content);
-
         //Hook
         groupsLv =(ListView) findViewById(R.id.groupsLv);
         createGroupChatroom = (RelativeLayout) findViewById(R.id.createGroupChatroom);
@@ -79,8 +78,6 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
         naviagtionDrawer();
         getCurrentUserInfo();
-
-
 
         createGroupChatroom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +200,7 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
                 //groupChatLists = new ArrayList<>();
                 if(result.getBoolean("status")) {
                     JSONArray data = result.getJSONArray("data");
+
                     if(data != null || data.length()>0) {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject obj = data.getJSONObject(i);
@@ -218,8 +216,9 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
                             ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude, latitude, distance);
                             groupChatLists.add(modelChatroom);
-                            setGroupChatLists(groupChatLists);
                         }
+                            setGroupChatLists(groupChatLists);
+
                     }
                 }
             }
@@ -227,15 +226,21 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
     }
 
     private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists){
-       GroupListAdapter groupListAdapter = new GroupListAdapter(NyGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
-       if(groupsLv.getAdapter() == null) {
-            groupsLv.setAdapter(groupListAdapter);
-        }else{
-            groupsLv.setAdapter(groupListAdapter);
-            groupListAdapter.notifyDataSetChanged();
-            groupsLv.invalidateViews();
-            groupsLv.refreshDrawableState();
-        }
+         final GroupListAdapter groupListAdapter = new GroupListAdapter(NyGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
+         new Handler().postDelayed(new Runnable() {
+             @Override
+             public void run() {
+                 if(groupsLv.getAdapter() == null) {
+                     groupsLv.setAdapter(groupListAdapter);
+                 }else {
+                     groupsLv.setAdapter(groupListAdapter);
+                     groupListAdapter.notifyDataSetChanged();
+                     groupsLv.invalidateViews();
+                     groupsLv.refreshDrawableState();
+                 }
+
+             }
+         },300);
 
 
        groupsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

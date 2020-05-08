@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,6 +36,9 @@ import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -58,6 +62,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     NavigationView navigationView;
     ImageView menuIcon;
     LinearLayout contentView;
+
+    int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,13 +99,22 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         });
     }
 
-
     private void getCurrentUserInfo() {
         SessionManagement sessionManagement = new SessionManagement(Dashboard.this);
-        int userID = sessionManagement.getSession();
+        userID = sessionManagement.getSession();
+
+        //save uid of currently signed in user in share preferences
+        SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("Current_USERID", userID);
+        editor.apply();
         Log.d("userID", String.valueOf(userID));
     }
 
+    private void nextActivity(){
+        Intent intent = new Intent(this,NyGroupChatroomList.class);
+        startActivity(intent);
+    }
     private void naviagtionDrawer() {
         //Naviagtion Drawer
         navigationView.bringToFront();
@@ -229,6 +244,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 startActivity(intent);
                 break;
             case R.id.nav_nearby:
+//                intent = new Intent(this,NyGroupChatroomList.class);
+//                startActivity(intent);
                 intent = new Intent(this,NyGroupChatroomList.class);
                 startActivity(intent);
                 break;

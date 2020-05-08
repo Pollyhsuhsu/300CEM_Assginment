@@ -8,11 +8,14 @@
     app:cardCornerRadius="25dp"
     app:contentPadding="3dp"
     app:cardElevation="10dp">
-    <RelativeLayout
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/shimmerFrameLayout">
+        <RelativeLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <com.blogspot.atifsoftwares.circularimageview.CircularImageView
             android:id="@+id/groupIconIv"
             android:layout_width="70dp"
@@ -23,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="Group Title"
+                android:text="@string/loading"
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_toRightOf="@+id/groupIconIv" />
@@ -35,7 +38,7 @@
                 android:layout_below="@id/groupTitleTv"
                 android:layout_toRightOf="@+id/groupIconIv"
                 android:layout_marginLeft="4dp"
-                android:text="Sender Name"
+                android:text="@string/loading"
                 android:textColor="@color/black" />
 
              <TextView
@@ -44,7 +47,7 @@
                 android:id="@+id/messageTv"
                 android:layout_toRightOf="@+id/nameTv"
                 android:layout_below="@id/groupTitleTv"
-                android:text="The message"
+                android:text=""
                 android:layout_marginLeft="4dp"
                 android:textColor="#666262"
                 android:singleLine="true"/>
@@ -54,11 +57,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/timeTv"
                 android:layout_below="@id/nameTv"
-                android:text="The message"
+                android:text="@string/loading"
                 android:textColor="#666262"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp"
                 android:singleLine="true"/>
-
-    </RelativeLayout>
+        </RelativeLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.cardview.widget.CardView>
