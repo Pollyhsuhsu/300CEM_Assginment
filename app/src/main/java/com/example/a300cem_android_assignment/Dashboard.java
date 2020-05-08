@@ -84,6 +84,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         int userID = sessionManagement.getSession();
         Log.d("userID", String.valueOf(userID));
     }
+
     private void naviagtionDrawer() {
         //Naviagtion Drawer
         navigationView.bringToFront();
@@ -189,6 +190,10 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         Intent intent;
         switch(menuItem.getItemId()){
             case R.id.nav_home:
+                break;
+            case R.id.nav_profile:
+                intent = new Intent(this,UserProfile.class);
+                startActivity(intent);
                 break;
             case R.id.nav_nearby:
                 intent = new Intent(this,NyGroupChatroomList.class);

@@ -47,6 +47,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -90,7 +91,6 @@ public class GroupChatActivity extends AppCompatActivity {
     private static final int IMAGE_PICK_GALLERY_CODE = 2000;
 
     //permissions to be requested
-
     //pick image uri
     private Uri image_url = null;
     private String[] cameraPermissions;
@@ -101,7 +101,6 @@ public class GroupChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_chat);
-
         //Hook
         toolbar =(Toolbar)  findViewById(R.id.toolbar);
         groupIconIv = (ImageView) findViewById(R.id.groupIconIv);
@@ -485,7 +484,6 @@ public class GroupChatActivity extends AppCompatActivity {
         String filenamePath = "ChatImages/"+ "" + System.currentTimeMillis();
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(filenamePath);
         //upload image
-
         storageReference.putFile(image_url)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -529,8 +527,6 @@ public class GroupChatActivity extends AppCompatActivity {
                                     });
                             dbcheckifentryExistofNot();
                         }
-
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -539,6 +535,13 @@ public class GroupChatActivity extends AppCompatActivity {
                         //failed uploading image
                         Toast.makeText(GroupChatActivity.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
                         pd.dismiss();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                        //mPro
                     }
                 });
 

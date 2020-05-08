@@ -114,7 +114,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void userLogin(View view){
-        if(!vaildataPassword() || !vaildataEmail() ){
+        if(!vaildataPassword() || !vaildataUsername() ){
             return;
         }
         String login_username = username.getEditText().getText().toString();
@@ -131,8 +131,8 @@ public class Login extends AppCompatActivity {
         callApi.json_post(new CallApi.VolleyCallback() {
             @Override
             public void onSuccessResponse(JSONObject response) throws JSONException {
-                if(response.getBoolean("status")){
-                    //suss(response.getJSONObject("data"));
+                if (response.getBoolean("status")) {
+
                     JSONObject data = response.getJSONObject("data");
                     currentUser = new ModelUser();
                     currentUser.setU_id(data.getInt("id"));
@@ -140,12 +140,18 @@ public class Login extends AppCompatActivity {
                     currentUser.setEmail(data.getString("email"));
                     currentUser.setCreated_at(data.getString("created_at"));
                     currentUser.setUpdated_at(data.getString("updated_at"));
-                   // suss(currentUser);
+                    // suss(currentUser);
 
                     SessionManagement sessionManagement = new SessionManagement(Login.this);
                     sessionManagement.saveSession(currentUser);
                     moveToMainActivity();
+                }else{
+                    username.setError("Wrong Username");
+                    username.requestFocus();
+                    password.setError("Wrong Password");
+                    password.requestFocus();
                 }
+
             }
         },"/users/authenticate",jsonBodyObj);
     }
@@ -190,14 +196,14 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private Boolean vaildataEmail(){
+    private Boolean vaildataUsername(){
         String val = username.getEditText().getText().toString();
         String emailPatten = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if(val.isEmpty()){
             username.setError("Field cannot be empty");
             return false;
         }else if(val.matches(emailPatten)){
-            username.setError("Invalid email address");
+            username.setError("Invalid Username");
             return false;
         }else{
             username.setError(null);

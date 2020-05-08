@@ -6,6 +6,12 @@
             android:title="Home"/>
     </group>
 
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profile"
+            android:title="Profile"/>
+    </group>
+
     <item android:title="Find">
         <menu>
             <group android:checkableBehavior="single">
