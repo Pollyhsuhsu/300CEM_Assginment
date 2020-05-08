@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical"
-    android:padding="20dp"
-    tools:context=".Login">
+    tools:context=".Login" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".Login">
     <ImageView
         android:id="@+id/logo_image"
         android:layout_width="150dp"
@@ -21,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bungee"
-        android:text="Hello there, Welcome Back"
+        android:text="@string/welcome"
         android:textColor="#000"
         android:textSize="40sp"
         android:transitionName="logo_text" />
@@ -30,7 +34,7 @@
         android:id="@+id/slogan_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign In to continues"
+        android:text="@string/sign_in_to_continus"
         android:textSize="18sp"
         android:transitionName="logo_desc" />
 
@@ -46,13 +50,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+            android:hint="@string/username"
             android:transitionName="username_tran">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"></com.google.android.material.textfield.TextInputEditText>
+                android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -60,14 +64,14 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password"
             android:transitionName="password_tran"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"></com.google.android.material.textfield.TextInputEditText>
+                android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -77,7 +81,7 @@
             android:layout_margin="5dp"
             android:background="#00000000"
             android:elevation="0dp"
-            android:text="Forget Password?"></Button>
+            android:text="@string/forgetPassword"/>
 
         <Button
             android:id="@+id/login_btn"
@@ -87,9 +91,9 @@
             android:layout_marginBottom="5dp"
             android:background="#000"
             android:onClick="userLogin"
-            android:text="Go?"
+            android:text="@string/go"
             android:textColor="#fff"
-            android:transitionName="button_tran"></Button>
+            android:transitionName="button_tran"/>
 
         <Button
             android:id="@+id/signup_screen"
@@ -99,11 +103,17 @@
             android:layout_margin="5dp"
             android:background="#00000000"
             android:elevation="0dp"
-            android:text="New User? SIGN UP"
+            android:text="@string/newuser_signup"
             android:textColor="#000"
-            android:transitionName="button_signup_tran"></Button>
+            android:transitionName="button_signup_tran"/>
 
-
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content" />
     </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

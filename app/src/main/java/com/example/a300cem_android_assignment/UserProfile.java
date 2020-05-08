@@ -178,7 +178,7 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         //Naviagtion Drawer
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setCheckedItem(R.id.nav_profile);
 
         menuIcon.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -402,10 +402,10 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         Intent intent;
         switch(menuItem.getItemId()){
             case R.id.nav_home:
+                intent = new Intent(this,Dashboard.class);
+                startActivity(intent);
                 break;
             case R.id.nav_profile:
-                intent = new Intent(this,UserProfile.class);
-                startActivity(intent);
                 break;
             case R.id.nav_nearby:
                 intent = new Intent(this,NyGroupChatroomList.class);

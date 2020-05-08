@@ -78,6 +78,7 @@ public class GroupChatActivity extends AppCompatActivity {
     private TextView groupTitleTv;
     private EditText messageEt;
     private RecyclerView chatRv;
+    private ImageView returnPage;
 
     private ArrayList<ModelGroupChat> groupChatList;
     private GroupChatAdapter groupChatAdapter;
@@ -109,6 +110,7 @@ public class GroupChatActivity extends AppCompatActivity {
         messageEt =(EditText)  findViewById(R.id.messageEt);
         sendBtn =(ImageButton)  findViewById(R.id.sendBtn);
         chatRv =(RecyclerView)  findViewById(R.id.chatRv);
+        returnPage = findViewById(R.id.returnPage);
 
         //Get info.
         getcurrentChatRoomInfo();
@@ -139,6 +141,13 @@ public class GroupChatActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //pick image from camera/gallery
                 showImageImportDialog();
+            }
+        });
+
+        returnPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -388,23 +397,14 @@ public class GroupChatActivity extends AppCompatActivity {
         loadGroupMessage(currentChatroom);
     }
 
-    private String getRandomColor() {
-        Random r = new Random();
-        StringBuffer sb = new StringBuffer("#");
-        while(sb.length() < 7){
-            sb.append(Integer.toHexString(r.nextInt()));
-        }
-        return sb.toString().substring(0, 7);
-    }
-
     public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(GroupChatActivity.this);
 
-        builder.setTitle("Please confirm");
-        builder.setMessage("Are you want to exit the chat room?");
+        builder.setTitle(R.string.plz_cofim);
+        builder.setMessage(R.string.sure_exit);
         builder.setCancelable(true);
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Do something when user want to exit the app
@@ -413,7 +413,7 @@ public class GroupChatActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Do something when want to stay in the app

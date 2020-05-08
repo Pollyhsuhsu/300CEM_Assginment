@@ -50,7 +50,7 @@
                 android:layout_below="@id/groupIconIv"
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
-                android:hint="Group Title"
+                android:hint="@string/group_Title"
                 android:padding="10dp" />
 
             <EditText
@@ -61,7 +61,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@color/white"
                 android:gravity="top"
-                android:hint="Group Description..."
+                android:hint="@string/group_desc"
                 android:inputType="textMultiLine|textCapSentences"
                 android:minHeight="100dp"
                 android:padding="10dp" />
@@ -86,7 +86,7 @@
                 android:layout_marginBottom="-210dp"
                 android:autoLink="all"
                 android:drawableLeft="@drawable/ic_pin"
-                android:text="Location"
+                android:text="@string/show_location"
                 android:textSize="12sp" />
 
         </RelativeLayout>

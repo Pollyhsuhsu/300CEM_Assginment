@@ -2,12 +2,59 @@
     <string name="app_name">300CEM_Android_Assignment</string>
     <string name="login"> Login</string>
     <string name="Dog_up"> Dog UP</string>
-    <string name="search_text"> Search...</string>
+
     <string name="dogs"> Dogs</string>
-    <string name="input_placeholder">Write a message</string>
-    <string name="underLine"><u>Location</u></string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_google_maps">Map</string>
-    <string name="google_maps_key">AIzaSyDF4PdMOEcFpzpfICzBnGnpUGF6uZPRqn4</string>
+    <string name="location">Location</string>
+
+    <!-- Dashboard-->
+    <string name="search_text"> Search...</string>
+
+    <!-- Create chat room -->
+    <string name="group_Title">Group Title</string>
+    <string name="group_desc">Group Description...</string>
+    <string name="show_location">Location</string>
+
+        <string name="pick_image">Pick Image: </string>
+
+    <!-- Chat room list -->
+    <string name="create_chat_room_btn">Create a Chatroom</string>
+
+    <!-- Chat-->
+    <string name="plz_cofim">Please confirm</string>
+    <string name="sure_exit">Are you want to exit the chat room?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!-- Login -->
+    <string name="welcome">Hello there, Welcome Back</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="go">G0?</string>
+    <string name="sign_in_to_continus">Sign In to continues</string>
+    <string name="newuser_signup"> New User? SIGN UP</string>
+    <string name="forgetPassword">Forget Password?</string>
+        <string name="wrong_username">Wrong Username</string>
+        <string name="wrong_password">Wrong Password</string>
+
+    <!-- Sign in -->
+    <string name="welcome_">Welcome,</string>
+    <string name="singo">Sign In to start your new journey</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password...</string>
+    <string name="aldy_an_ac">Already have an account? Login </string>
+    <!--    <string name="password">Password</string>-->
+    <!--    <string name="username">Username</string>-->
+
+    <!--  Profile -->
+    <string name="u_id">User ID </string>
+    <string name="update">UPDATE </string>
+
+    <!--  Menu -->
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="find">Find</string>
+    <string name="nearby">Nearby</string>
+    <string name="content">Contact</string>
+    <string name="message">Message</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
 </resources>

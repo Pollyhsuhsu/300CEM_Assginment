@@ -3,33 +3,33 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:title="Home"/>
+            android:title="@string/home"/>
     </group>
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_profile"
-            android:title="Profile"/>
+            android:title="@string/profile"/>
     </group>
 
-    <item android:title="Find">
+    <item android:title="@string/find">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_nearby"
-                    android:title="Nearby"/>
+                    android:title="@string/nearby"/>
 
             </group>
         </menu>
     </item>
 
 
-    <item android:title="Content">
+    <item android:title="@string/content">
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_message"
-                    android:title="Message"/>
+                    android:title="@string/message"/>
 
 <!--                <item-->
 <!--                    android:id="@+id/nav_profile"-->
@@ -66,12 +66,12 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/nav_share"
-                    android:title="Home"/>
+                    android:id="@+id/nav_languages"
+                    android:title="Languages"/>
 
                 <item
                     android:id="@+id/Log_out"
-                    android:title="Logout"/>
+                    android:title="@string/logout"/>
 
             </group>
         </menu>

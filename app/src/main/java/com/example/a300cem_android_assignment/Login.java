@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.a300cem_android_assignment.Session.SessionManagement;
@@ -34,6 +35,7 @@ public class Login extends AppCompatActivity {
     ImageView image;
     TextView logoText, sloganText;
     TextInputLayout username,password;
+    ProgressBar progressBar;
     CallApi callApi = new CallApi();
 
     @Override
@@ -50,6 +52,8 @@ public class Login extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         login_btn = findViewById(R.id.login_btn);
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(View.GONE);
 
         callSignUp.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -69,33 +73,11 @@ public class Login extends AppCompatActivity {
                 startActivity(intent,options.toBundle());
             }
         });
-
-//        login_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                JSONObject jsonBodyObj = new JSONObject();
-//                try{
-//                    jsonBodyObj.put("email", "admin");
-//                    jsonBodyObj.put("password", "admin");
-//                }catch (JSONException e){
-//                    e.printStackTrace();
-//                }
-//
-//                callApi.json_post(new CallApi.VolleyCallback() {
-//                    @Override
-//                    public void onSuccessResponse(JSONObject response) {
-//                        Log.d(TAG,response.toString());
-//                    }
-//                },"/users/authenticate",jsonBodyObj);
-//            }
-//        });
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         checkSession();
     }
 
@@ -117,6 +99,8 @@ public class Login extends AppCompatActivity {
         if(!vaildataPassword() || !vaildataUsername() ){
             return;
         }
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(10000);
         String login_username = username.getEditText().getText().toString();
         String login_userpassword = password.getEditText().getText().toString();
 
@@ -146,9 +130,10 @@ public class Login extends AppCompatActivity {
                     sessionManagement.saveSession(currentUser);
                     moveToMainActivity();
                 }else{
-                    username.setError("Wrong Username");
+                    progressBar.setVisibility(View.GONE);
+                    username.setError(getText(R.string.wrong_username));
                     username.requestFocus();
-                    password.setError("Wrong Password");
+                    password.setError(getText(R.string.wrong_password));
                     password.requestFocus();
                 }
 

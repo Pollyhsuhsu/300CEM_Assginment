@@ -248,7 +248,7 @@ public class CreateChatRoom extends AppCompatActivity{
         String[] options = {"Camera", "Gallery"};
         //dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick Image: ")
+        builder.setTitle(R.string.pick_image)
                 .setItems(options, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

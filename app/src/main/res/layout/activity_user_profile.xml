@@ -192,7 +192,7 @@
                     android:padding="20dp">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:hint="User Id"
+                        android:hint="@string/u_id"
                         android:id="@+id/userid_profile"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent">
@@ -206,7 +206,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:hint="Full Name"
+                        android:hint="@string/username"
                         android:id="@+id/full_name_profile"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent">
@@ -220,7 +220,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:hint="E-Mail"
+                        android:hint="@string/email"
                         android:id="@+id/email_profile"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent">
@@ -234,7 +234,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:id="@+id/password_profile"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent">
@@ -254,7 +254,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
                         android:layout_width="match_parent"
-                        android:text="UPDATE" />
+                        android:text="@string/update"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

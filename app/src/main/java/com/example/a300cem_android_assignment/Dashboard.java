@@ -8,15 +8,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.example.a300cem_android_assignment.HomeAdapter.CategoriesAdapter;
 import com.example.a300cem_android_assignment.HomeAdapter.CategoriesHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.FeaturedAdpater;
@@ -24,10 +32,17 @@ import com.example.a300cem_android_assignment.HomeAdapter.FeaturedHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedHelperClass;
 import com.example.a300cem_android_assignment.Session.SessionManagement;
+import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -49,7 +64,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_dashboard);
-
 
         //Hooks
         featuredRecycler = findViewById(R.id.featured_recycler);
@@ -78,6 +92,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
             }
         });
     }
+
 
     private void getCurrentUserInfo() {
         SessionManagement sessionManagement = new SessionManagement(Dashboard.this);
@@ -167,11 +182,29 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         mostViewedRecycler.setHasFixedSize(true);
         mostViewedRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        ArrayList<MostViewedHelperClass> mostViewedLocations = new ArrayList<>();
-        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "McDonald's","sdfasdfasdf"));
-        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Edenrobe","sdfasdfasdf"));
-        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "J.","sdfasdfasdf"));
-        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Walmart","sdfasdfasdf"));
+        final ArrayList<MostViewedHelperClass> mostViewedLocations = new ArrayList<>();
+        CallApi callApi = new CallApi();
+        callApi.json_get(new CallApi.VolleyCallback() {
+            @Override
+            public void onSuccessResponse(JSONObject result) throws JSONException {
+                if(result.getBoolean("status")) {
+                    JSONArray data = result.getJSONArray("data");
+                    if(data != null || data.length()>0) {
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject obj = data.getJSONObject(i);
+                            String chatroom_name = obj.getString("chatroom_name");
+                            String chatroom_desc = obj.getString("chatroom_desc");
+                            String chatroom_icon = obj.getString("chatroom_image");
+                            mostViewedLocations.add(new MostViewedHelperClass(chatroom_icon, chatroom_name,chatroom_desc));
+                        }
+                    }
+                }
+            }
+        },"/participant/most");
+//        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "McDonald's","sdfasdfasdf"));
+//        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Edenrobe","sdfasdfasdf"));
+//        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "J.","sdfasdfasdf"));
+//        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Walmart","sdfasdfasdf"));
 
         adapter = new MostViewedAdpater(mostViewedLocations);
         mostViewedRecycler.setAdapter(adapter);

@@ -17,13 +17,20 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/returnPage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_group_return_white"/>
 
             <com.blogspot.atifsoftwares.circularimageview.CircularImageView
                 android:id="@+id/groupIconIv"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/ic_corgi_foreground" />
+                android:src="@mipmap/ic_corgi_foreground"
+                android:layout_toRightOf="@+id/returnPage" />
 
             <TextView
                 android:id="@+id/groupTitleTv"

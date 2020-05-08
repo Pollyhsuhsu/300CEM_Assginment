@@ -1,16 +1,16 @@
 package com.example.a300cem_android_assignment.HomeAdapter;
 
 public class MostViewedHelperClass {
-    int image;
+    String image;
     String title, description;
 
-    public MostViewedHelperClass(int image, String title, String description) {
+    public MostViewedHelperClass(String image, String title, String description) {
         this.image = image;
         this.title = title;
         this.description = description;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
@@ -22,7 +22,7 @@ public class MostViewedHelperClass {
         return description;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 

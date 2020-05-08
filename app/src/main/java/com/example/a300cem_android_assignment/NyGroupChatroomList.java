@@ -387,6 +387,10 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
                 intent = new Intent(this,Dashboard.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_profile:
+                intent = new Intent(this,UserProfile.class);
+                startActivity(intent);
+                break;
             case R.id.nav_nearby:
                 break;
             case R.id.nav_message:
