@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -33,6 +34,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,6 +81,13 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
         naviagtionDrawer();
         getCurrentUserInfo();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            // do your stuff
+        } else {
+            mAuth.signInAnonymously();
+        }
 
         createGroupChatroom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,30 +178,6 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
         if(!groupChatLists.isEmpty()){
             groupChatLists.clear();
         };
-//        CallApi callApi = new CallApi();
-//        callApi.json_get(new CallApi.VolleyCallback() {
-//            @Override
-//            public void onSuccessResponse(JSONObject result) throws JSONException {
-//                groupChatLists = new ArrayList<>();
-//                JSONArray data = result.getJSONArray("data");
-//                for (int i = 0; i < data.length(); i++) {
-//                    JSONObject obj = data.getJSONObject(i);
-//                    int id = obj.getInt("id");
-//                    String chatroom_name = obj.getString("chatroom_name");
-//                    String chatroom_desc = obj.getString("chatroom_desc");
-//                    String chatroom_icon = obj.getString("chatroom_image");
-//                    int created_by =  obj.getInt("created_by");
-//                    String created_at = obj.getString("created_at");
-//                    double longitude  = obj.getDouble("longitude");
-//                    double latitude= obj.getDouble("latitude");
-//
-//                    ModelChatroom modelChatroom = new ModelChatroom(id, created_by, chatroom_name, chatroom_icon, chatroom_desc, created_at, longitude,latitude,12);
-//                    Log.d("modelchatroom1",obj.toString());
-//                    groupChatLists.add(modelChatroom);
-//                   // setGroupChatLists(groupChatLists);
-//                }
-//            }
-//        },"/chatrooms/All");
 
         CallApi callApi = new CallApi();
         callApi.json_get(new CallApi.VolleyCallback() {
@@ -227,20 +213,14 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
     private void setGroupChatLists(final ArrayList<ModelChatroom> groupChatLists){
          final GroupListAdapter groupListAdapter = new GroupListAdapter(NyGroupChatroomList.this, R.layout.row_groupchat, groupChatLists);
-         new Handler().postDelayed(new Runnable() {
-             @Override
-             public void run() {
-                 if(groupsLv.getAdapter() == null) {
-                     groupsLv.setAdapter(groupListAdapter);
-                 }else {
-                     groupsLv.setAdapter(groupListAdapter);
-                     groupListAdapter.notifyDataSetChanged();
-                     groupsLv.invalidateViews();
-                     groupsLv.refreshDrawableState();
-                 }
-
+             if(groupsLv.getAdapter() == null) {
+                 groupsLv.setAdapter(groupListAdapter);
+             }else {
+                 groupsLv.setAdapter(groupListAdapter);
+                 groupListAdapter.notifyDataSetChanged();
+                 groupsLv.invalidateViews();
+                 groupsLv.refreshDrawableState();
              }
-         },300);
 
 
        groupsLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

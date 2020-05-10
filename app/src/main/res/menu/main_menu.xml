@@ -65,9 +65,6 @@
     <item android:title="Setting">
         <menu>
             <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_languages"
-                    android:title="Languages"/>
 
                 <item
                     android:id="@+id/Log_out"

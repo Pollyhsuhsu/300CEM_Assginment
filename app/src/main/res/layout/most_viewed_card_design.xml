@@ -8,6 +8,7 @@
     android:layout_margin="10dp">
 
     <RelativeLayout
+        android:id="@+id/mostViewedRecyclerLayout"
         android:layout_width="300dp"
         android:layout_height="150dp"
         android:padding="10dp">
@@ -28,21 +29,29 @@
             android:textSize="20dp"
             android:fontFamily="@font/baloo"/>
 
-        <RatingBar
-            android:id="@+id/ms_rating"
+<!--        <RatingBar-->
+<!--            android:id="@+id/ms_rating"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style="@style/Widget.AppCompat.RatingBar.Small"-->
+<!--            android:layout_below="@id/ms_title"-->
+<!--            android:layout_toRightOf="@id/ms_image"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:rating="4"/>-->
+        <TextView
+            android:id="@+id/participant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:text="participant"
             android:layout_below="@id/ms_title"
             android:layout_toRightOf="@id/ms_image"
             android:layout_marginLeft="10dp"
-            android:rating="4"/>
-
+            android:textSize="15dp"/>
         <TextView
             android:id="@+id/ms_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ms_rating"
+            android:layout_below="@id/participant"
             android:layout_toRightOf="@id/ms_image"
             android:padding="10dp"
             android:text="ksdfsdnfsndifkdfk ksdfnfn kjdfjkdjfkjdfk kdjfkfijdsifj"/>
