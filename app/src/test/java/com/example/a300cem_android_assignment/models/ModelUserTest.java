@@ -10,10 +10,9 @@ public class ModelUserTest {
     private String username = "Test";
     private String password = "Test";
     private String email = "Test@gmail.com";
-    private String user_image = "user_image";
     private String created_at = "2020-11-11";
     private String updated_at = "2020-11-11";
-    private ModelUser currentUser = new ModelUser(u_id,username,password,email,user_image,created_at,updated_at);
+    private ModelUser currentUser = new ModelUser(u_id,username,password,email,created_at,updated_at);
     @Test
     public void getU_id() {
         assertEquals(u_id, currentUser.getU_id());
@@ -76,20 +75,10 @@ public class ModelUserTest {
 
     @Test
     public void setUpdated_at() {
-        currentUser.setUpdated_at(this.user_image);
-        assertEquals(this.user_image, currentUser.getUser_image());
-    }
-
-    @Test
-    public void getUser_image() {
-        assertEquals(user_image, currentUser.getUser_image());
-    }
-
-    @Test
-    public void setUser_image() {
         currentUser.setUpdated_at(this.updated_at);
         assertEquals(this.updated_at, currentUser.getUpdated_at());
     }
+
     @Test
     public void testToString() {
 
@@ -105,14 +94,13 @@ public class ModelUserTest {
 
         assertFalse(new ModelUser().toString().contains("@"));
 
-        assertEquals("ModelUser{" +
-                    "u_id=" + u_id +
-                    ", username='" + username + '\'' +
-                    ", password='" + password + '\'' +
-                    ", email='" + email + '\'' +
-                    ", user_image='" + user_image + '\'' +
-                    ", created_at='" + created_at + '\'' +
-                    ", updated_at='" + updated_at + '\'' +
-                    '}', currentUser.toString());
+        assertEquals("{" +
+                "u_id=" + u_id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", created_at='" + created_at + '\'' +
+                ", updated_at='" + updated_at + '\'' +
+                '}', currentUser.toString());
     }
 }

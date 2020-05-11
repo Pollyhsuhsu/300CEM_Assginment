@@ -38,17 +38,13 @@ import com.example.a300cem_android_assignment.models.ModelChatroom;
 import com.example.a300cem_android_assignment.Adapter.GroupChatAdapter;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.example.a300cem_android_assignment.models.ModelGroupChat;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -65,18 +61,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-
 public class GroupChatActivity extends AppCompatActivity {
     private ModelChatroom currentChatroom;
     private ModelUser currentUser;
 
     FirebaseDatabase FireBaseDatabase;
-    boolean notify = false;
+    //DatabaseReference GroupNameRef, GroupMessageKeyRef;
 
-    int currentUserID, currentGroupID,hisUid;
-    String currentGroupName, currentGroupDesc, currentCreatedAt, currentData, currentTime, hisName;
+    int currentUserID, currentGroupID;
+    String currentGroupName, currentGroupDesc, currentCreatedAt, currentData, currentTime;
     String username;
 
     private Toolbar toolbar;
@@ -133,8 +126,6 @@ public class GroupChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notify = true;
-                //get test from edit text
                 String message = messageEt.getText().toString().trim();
                 if(TextUtils.isEmpty(message)){
                     //empty, don't send
@@ -197,10 +188,10 @@ public class GroupChatActivity extends AppCompatActivity {
     }
 
     private void pickCamera(){
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(MediaStore.Images.Media.TITLE, "GroupImageTitle");
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "GroupImageDescription");
-        image_url = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+        ContentValues cv = new ContentValues();
+        cv.put(MediaStore.Images.Media.TITLE, "Group Image Title:");
+        cv.put(MediaStore.Images.Media.DESCRIPTION, "Group Image Description");
+        image_url = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, cv);
 
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, image_url);
@@ -244,11 +235,7 @@ public class GroupChatActivity extends AppCompatActivity {
                         groupChatList.clear();
                         for(DataSnapshot ds: dataSnapshot.getChildren()){
                             ModelGroupChat model = ds.getValue(ModelGroupChat.class);
-
-                            if(model.getSender_id() != currentUserID){
-                                hisUid = model.getSender_id();
-                            };
-                            hisName = model.getSender_name();
+                            System.out.println("mode"+ model.toString());
                             groupChatList.add(model);
                         }
 
@@ -304,7 +291,6 @@ public class GroupChatActivity extends AppCompatActivity {
                         //message sent
                         //clear messageEt
                         messageEt.setText("");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -313,11 +299,6 @@ public class GroupChatActivity extends AppCompatActivity {
                         Toast.makeText(GroupChatActivity.this,"" + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        String msg = message;
-
-
-
         dbcheckifentryExistofNot();
     }
 
@@ -477,19 +458,19 @@ public class GroupChatActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //handle image pick result
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == IMAGE_PICK_GALLERY_CODE) {
+        if(resultCode == RESULT_OK){
+            if(requestCode == IMAGE_PICK_GALLERY_CODE){
                 //was picked from galler
                 image_url = data.getData();
                 sendImageMessage();
 
-            } else if (requestCode == IMAGE_PICK_CAMERA_CODE) {
+            }else if(requestCode == IMAGE_PICK_CAMERA_CODE){
                 //was picked from camera
                 //set to imageview
                 sendImageMessage();
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void sendImageMessage() {
@@ -511,6 +492,7 @@ public class GroupChatActivity extends AppCompatActivity {
                         Task<Uri> p_uriTask = taskSnapshot.getStorage().getDownloadUrl();
                         while(!p_uriTask.isSuccessful());
                         Uri p_downloadUri = p_uriTask.getResult();
+
                         if(p_uriTask.isSuccessful()){
                             //image url received, save in db
                             // timestamp
@@ -520,7 +502,7 @@ public class GroupChatActivity extends AppCompatActivity {
                             HashMap<String, Object> hashMap = new HashMap<>();
                             hashMap.put("sender_id", (long)currentUserID);
                             hashMap.put("sender_name", username);
-                            hashMap.put("message", "" +  p_downloadUri);
+                            hashMap.put("message", p_downloadUri);
                             hashMap.put("timestamp", timestamp);
                             hashMap.put("type", "" + "image"); // text/image/file
 
@@ -554,6 +536,13 @@ public class GroupChatActivity extends AppCompatActivity {
                         Toast.makeText(GroupChatActivity.this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
                         pd.dismiss();
                     }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                        //mPro
+                    }
                 });
 
 
@@ -562,7 +551,7 @@ public class GroupChatActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode){
-            case CAMERA_REQUEST_CODE:
+            case CAMERA_REQUEST_CODE:{
                 if(grantResults.length > 0){
                     boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -572,8 +561,9 @@ public class GroupChatActivity extends AppCompatActivity {
                         Toast.makeText(this,"Camera & Storage permissions are required", Toast.LENGTH_SHORT).show();
                     }
                 }
-                break;
-            case STORAGE_REQUEST_CODE:
+            }
+            break;
+            case STORAGE_REQUEST_CODE:{
                 if(grantResults.length > 0){
                     boolean storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if(storageAccepted){
@@ -582,7 +572,12 @@ public class GroupChatActivity extends AppCompatActivity {
                         Toast.makeText(this,"Storage permissions are required", Toast.LENGTH_SHORT).show();
                     }
                 }
-                break;
+            }
+            break;
         }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+
 }

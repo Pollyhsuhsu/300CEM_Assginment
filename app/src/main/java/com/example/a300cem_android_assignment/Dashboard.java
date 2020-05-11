@@ -36,8 +36,6 @@ import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -51,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    ArrayList<MostViewedHelperClass> mostViewedLocations = new ArrayList<>();
+
     private ImageView near_by;
     RecyclerView featuredRecycler, mostViewedRecycler, categoriesRecycler;
     RecyclerView.Adapter adapter;
@@ -102,13 +100,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     }
 
     private void getCurrentUserInfo() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            // do your stuff
-        } else {
-            mAuth.signInAnonymously();
-        }
         SessionManagement sessionManagement = new SessionManagement(Dashboard.this);
         userID = sessionManagement.getSession();
 
@@ -169,10 +160,10 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         featuredRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
 
         ArrayList<FeaturedHelperClass> featuredLocations = new ArrayList<>();
-        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo1,"球球","球球比人打"));
-        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo21,"猛男","猛男撿樹枝之小粉紅玩唔島"));
-        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo2,"小超","全身黑的狗要五大訴求：唔做警犬唔食野味唔做小粉紅唔入元朗唔周圍去廁所"));
 
+        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo1,"kaukau","kdjfiajsdfijsadiof"));
+        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo1,"kaukau2","kdjfiajsdfijsadiof"));
+        featuredLocations.add(new FeaturedHelperClass(R.drawable.photo1,"kaukau3","kdjfiajsdfijsadiof"));
 
         adapter = new FeaturedAdpater(featuredLocations);
         featuredRecycler.setAdapter(adapter);
@@ -205,9 +196,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
         mostViewedRecycler.setHasFixedSize(true);
         mostViewedRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        if(!mostViewedLocations.isEmpty()){
-            mostViewedLocations.clear();
-        };
+
+        final ArrayList<MostViewedHelperClass> mostViewedLocations = new ArrayList<>();
         CallApi callApi = new CallApi();
         callApi.json_get(new CallApi.VolleyCallback() {
             @Override
@@ -217,13 +207,10 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                     if(data != null || data.length()>0) {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject obj = data.getJSONObject(i);
-                            int chatroom_id = obj.getInt("id");
                             String chatroom_name = obj.getString("chatroom_name");
                             String chatroom_desc = obj.getString("chatroom_desc");
                             String chatroom_icon = obj.getString("chatroom_image");
-                            int participants = obj.getInt("num_items");
-                            mostViewedLocations.add(new MostViewedHelperClass(chatroom_icon, chatroom_name,chatroom_desc,participants,chatroom_id));
-                            setViewedRecycler(mostViewedLocations);
+                            mostViewedLocations.add(new MostViewedHelperClass(chatroom_icon, chatroom_name,chatroom_desc));
                         }
                     }
                 }
@@ -233,13 +220,11 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 //        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Edenrobe","sdfasdfasdf"));
 //        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "J.","sdfasdfasdf"));
 //        mostViewedLocations.add(new MostViewedHelperClass(R.drawable.photo1, "Walmart","sdfasdfasdf"));
+
+        adapter = new MostViewedAdpater(mostViewedLocations);
+        mostViewedRecycler.setAdapter(adapter);
     }
 
-    private void setViewedRecycler(ArrayList<MostViewedHelperClass> mostViewedLocations){
-        adapter = new MostViewedAdpater(mostViewedLocations, this);
-        mostViewedRecycler.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerVisible(GravityCompat.START)) {

@@ -18,7 +18,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -38,7 +37,6 @@ import com.example.a300cem_android_assignment.Session.SessionManagement;
 import com.example.a300cem_android_assignment.Volley.AppController;
 import com.example.a300cem_android_assignment.models.ModelChatroom;
 import com.example.a300cem_android_assignment.models.ModelUser;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -82,7 +80,6 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
     ImageView menuIcon;
     LinearLayout contentView;
     Button updateProfile;
-    ShimmerFrameLayout profile_image_s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +97,6 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         fullnameLabel = findViewById(R.id.fullname_field);
         usernameLabel = findViewById(R.id.username_field);
         updateProfile = findViewById(R.id.updateProfile);
-        profile_image_s = findViewById(R.id.profile_image_s);
 
         //Menu Hooks
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -111,12 +107,10 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         //init permission arrays
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        profile_image_s.startShimmer();
+
         //show All data
         naviagtionDrawer();
         getCurrentUserID();
-
-
 
         userIconIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,16 +249,7 @@ public class UserProfile extends AppCompatActivity implements NavigationView.OnN
         email.getEditText().setText(currentUser.getEmail());
         password.getEditText().setText(currentUser.getPassword());
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                profile_image_s.stopShimmer();
-                profile_image_s.setShimmer(null);
-
-                StringtoImage(currentUser.getUser_image(),userIconIv);
-            }
-        },1000);
-
+        StringtoImage(currentUser.getUser_image(),userIconIv);
     }
     private void StringtoImage(String images, final ImageView userIconIv){
         Log.d("image", images);

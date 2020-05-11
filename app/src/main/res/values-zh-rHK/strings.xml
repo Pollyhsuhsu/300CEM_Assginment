@@ -41,7 +41,4 @@
     <string name="yes">是</string>
     <string name="no">繼續吹水</string>
     <string name="loading">加載中……</string>
-    <string name="participant">/人</string>
-    <string name="star">本週之🌟</string>
-    <string name="vote">投選你最喜歡的寵物，登上冠軍榜。</string>
 </resources>
