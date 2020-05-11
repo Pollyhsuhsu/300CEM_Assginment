@@ -61,22 +61,17 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <service android:name=".notifications.FirebaseMessaging"
+        <service android:name=".Wareable.CountingService"
             android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
+            android:exported="false"/>
 
-
-        <service android:name=".notifications.FirebaseService"
+        <receiver android:name=".Wareable.CountingReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_SERVICE"/>
+                <action android:name="com.example.mywearables.BROADCAST" />
             </intent-filter>
-        </service>
+        </receiver>
     </application>
 
 </manifest>

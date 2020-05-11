@@ -8,24 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.example.a300cem_android_assignment.HomeAdapter.CategoriesAdapter;
 import com.example.a300cem_android_assignment.HomeAdapter.CategoriesHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.FeaturedAdpater;
@@ -33,22 +23,13 @@ import com.example.a300cem_android_assignment.HomeAdapter.FeaturedHelperClass;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedAdpater;
 import com.example.a300cem_android_assignment.HomeAdapter.MostViewedHelperClass;
 import com.example.a300cem_android_assignment.Session.SessionManagement;
-import com.example.a300cem_android_assignment.Volley.AppController;
-import com.example.a300cem_android_assignment.models.ModelUser;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     ArrayList<MostViewedHelperClass> mostViewedLocations = new ArrayList<>();
@@ -102,22 +83,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     }
 
     private void getCurrentUserInfo() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            // do your stuff
-        } else {
-            mAuth.signInAnonymously();
-        }
         SessionManagement sessionManagement = new SessionManagement(Dashboard.this);
         userID = sessionManagement.getSession();
-
-        //save uid of currently signed in user in share preferences
-        SharedPreferences sp = getSharedPreferences("SP_USER", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt("Current_USERID", userID);
-        editor.apply();
-        Log.d("userID", String.valueOf(userID));
     }
 
     private void nextActivity(){
@@ -188,9 +155,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
 
 
         ArrayList<CategoriesHelperClass> categoriesHelperClasses = new ArrayList<>();
-        categoriesHelperClasses.add(new CategoriesHelperClass( R.drawable.photo1,"Education", gradient1));
-        categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.photo1, "HOSPITAL", gradient2));
-        categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.photo1, "Restaurant", gradient3));
+        categoriesHelperClasses.add(new CategoriesHelperClass( R.drawable.school,"Education", gradient1));
+        categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.hispitor, "HOSPITAL", gradient2));
+        categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.images, "Restaurant", gradient3));
         categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.photo1, "Shopping", gradient4));
         categoriesHelperClasses.add(new CategoriesHelperClass(R.drawable.photo1, "Transport", gradient1));
 
@@ -259,8 +226,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
                 startActivity(intent);
                 break;
             case R.id.nav_nearby:
-//                intent = new Intent(this,NyGroupChatroomList.class);
-//                startActivity(intent);
                 intent = new Intent(this,NyGroupChatroomList.class);
                 startActivity(intent);
                 break;

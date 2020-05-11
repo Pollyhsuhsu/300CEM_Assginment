@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +24,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.a300cem_android_assignment.Session.SessionManagement;
+import com.example.a300cem_android_assignment.Wareable.CountingService;
 import com.example.a300cem_android_assignment.models.ModelUser;
+import com.example.a300cem_android_assignment.notifications.ReminderBroadcast;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
@@ -29,6 +35,7 @@ import org.json.JSONObject;
 public class Login extends AppCompatActivity {
 
     public static final String TAG = "MYTAG";
+    public static final String DEBUG_KEY = "DEBUG_KEY";
 
     ModelUser currentUser;
     Button callSignUp, login_btn;
@@ -150,9 +157,16 @@ public class Login extends AppCompatActivity {
     }
 
     private void moveToMainActivity() {
-        Intent intent = new Intent(this, Dashboard.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Intent intent = new Intent(this, ReminderBroadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        long timeAtButtonChlick = System.currentTimeMillis();
+        long tsim = 1000*20;
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeAtButtonChlick + tsim, pendingIntent);
+        Intent intent2 = new Intent(this, Dashboard.class);
+        intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent2);
     }
 
 
@@ -193,6 +207,16 @@ public class Login extends AppCompatActivity {
         }else{
             username.setError(null);
             return true;
+        }
+    }
+
+    private void createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "'";
+            String description = "";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyLemubit", name, importance);
+            channel.setDescription(description);
         }
     }
 }

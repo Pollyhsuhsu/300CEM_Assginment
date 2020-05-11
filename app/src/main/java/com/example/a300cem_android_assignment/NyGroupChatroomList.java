@@ -253,7 +253,7 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
         final NumberPicker numberPicker = (NumberPicker)npDialog.findViewById(R.id.numberPicker);
 
-        String mValues[] = { "100km ", "200km ","300km", "400km", "450km","500km"};
+        String mValues[] = { "1km ", "2km ","3km", "4km", "5km", "6km"};
         setNubmerPicker(numberPicker,mValues);
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener(){
             @Override
@@ -270,22 +270,22 @@ public class NyGroupChatroomList extends AppCompatActivity implements Navigation
 
                 switch (numberPicker.getValue()) {
                     case 0:
-                        pick = 100;
+                        pick = 1;
                         break;
                     case 1:
-                        pick = 200;
+                        pick = 2;
                         break;
                     case 2:
-                        pick = 300;
+                        pick = 3;
                         break;
                     case 3:
-                        pick = 400;
+                        pick = 4;
                         break;
                     case 4:
-                        pick = 450;
+                        pick = 5;
                         break;
                     case 5:
-                        pick = 500;
+                        pick = 6;
                         break;
                     default:
                         pick = 5000;

@@ -44,4 +44,7 @@
     <string name="participant">/人</string>
     <string name="star">本週之🌟</string>
     <string name="vote">投選你最喜歡的寵物，登上冠軍榜。</string>
+    <string name="story">故事</string>
+    <string name="news">最新消息</string>
+    <string name="pets">寵物</string>
 </resources>

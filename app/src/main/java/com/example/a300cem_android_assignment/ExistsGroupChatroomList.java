@@ -193,6 +193,10 @@ public class ExistsGroupChatroomList extends AppCompatActivity implements Naviga
                 intent = new Intent(this,Dashboard.class);
                 startActivity(intent);
                 break;
+            case R.id.nav_profile:
+                intent = new Intent(this,UserProfile.class);
+                startActivity(intent);
+                break;
             case R.id.nav_nearby:
                 intent = new Intent(this,NyGroupChatroomList.class);
                 startActivity(intent);
