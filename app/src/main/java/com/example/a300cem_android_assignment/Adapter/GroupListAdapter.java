@@ -67,34 +67,32 @@ public class GroupListAdapter extends ArrayAdapter<ModelChatroom> {
         final ImageView groupIconIv = (ImageView) convertView.findViewById(R.id.groupIconIv);
         final TextView groupTitleTv = (TextView) convertView.findViewById(R.id.groupTitleTv);
 
-            final String toStringcontext = mcontext+ "";
+        final String toStringcontext = mcontext+ "";
 
-                shimmerFrameLayout.startShimmer();
-                if (group_icon != null) {
-                    StringtoImage(group_icon, groupIconIv);
+            shimmerFrameLayout.startShimmer();
+            if (group_icon != null) {
+                StringtoImage(group_icon, groupIconIv);
+            }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setShimmer(null);
+
+                if (toStringcontext.contains("NyGroupChatroomList")) {
+                    timeTv.setText(formatDouble3(distance) + " km");
+                    nameTv.setText(group_desc);
+                    messageTv.setVisibility(View.GONE);
+                } else {
+                    messageTv.setText("");
+                    timeTv.setText("");
+                    nameTv.setText("");
+                    loadLastMessage(modelChatroom, messageTv, timeTv, nameTv);
                 }
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setShimmer(null);
-
-                    if (toStringcontext.contains("NyGroupChatroomList")) {
-                        timeTv.setText(formatDouble3(distance) + " km");
-                        nameTv.setText(group_desc);
-                        messageTv.setVisibility(View.GONE);
-                    } else {
-                        messageTv.setText("");
-                        timeTv.setText("");
-                        nameTv.setText("");
-                        loadLastMessage(modelChatroom, messageTv, timeTv, nameTv);
-                    }
-                    groupTitleTv.setText(group_name);
-                }
-            },3000);
-
-
+                groupTitleTv.setText(group_name);
+            }
+        },3000);
 
         //loadLastMessage(modelChatroom, convertView,messageTv,timeTv,nameTv);
         return convertView;

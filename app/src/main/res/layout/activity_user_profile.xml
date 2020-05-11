@@ -62,20 +62,24 @@
                     android:background="#fece2f"
                     android:padding="20dp">
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/profile_image_s">
                     <com.blogspot.atifsoftwares.circularimageview.CircularImageView
                         android:id="@+id/profile_image"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_centerVertical="true"
                         android:src="@mipmap/ic_corgi_foreground"/>
-
+                    </com.facebook.shimmer.ShimmerFrameLayout>
                     <TextView
                         android:id="@+id/fullname_field"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/profile_image"
+                        android:layout_toRightOf="@+id/profile_image_s"
                         android:fontFamily="@font/bungee"
                         android:includeFontPadding="false"
                         android:text="Taimoor Sikander"
@@ -88,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/fullname_field"
                         android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/profile_image"
+                        android:layout_toRightOf="@+id/profile_image_s"
                         android:includeFontPadding="false"
                         android:text="taimoor_sikander"
                         android:textSize="14sp" />
@@ -198,10 +202,11 @@
                         android:layout_width="match_parent">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:drawableLeft="@drawable/ic_phone_smaill_icon"
+                            android:drawableLeft="@drawable/ic_pet"
                             android:drawablePadding="10dp"
                             android:layout_height="wrap_content"
-                            android:layout_width="match_parent"/>
+                            android:layout_width="match_parent"
+                            android:textStyle="bold"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -240,7 +245,7 @@
                         android:layout_width="match_parent">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:drawableLeft="@drawable/ic_phone_smaill_icon"
+                            android:drawableLeft="@drawable/ic_lock"
                             android:drawablePadding="10dp"
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent" />
